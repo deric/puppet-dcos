@@ -23,7 +23,7 @@ class dcos::agent (
   }
 
   exec { 'dcos-systemd-reload':
-    command     => 'systemctl daemon-reload',
+    command     => 'systemctl daemon-reload && rm -f /var/lib/mesos/slave/meta/slaves/latest',
     path        => '/bin:/usr/bin:/usr/sbin',
     refreshonly => true,
   }
