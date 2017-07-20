@@ -12,13 +12,13 @@ class dcos::agent (
   file {'/var/lib/dcos/mesos-slave-common':
     ensure => 'present',
     content => template('dcos/agent-common.erb'),
-    notify  => Exec['stop-dcos-agent'],
   }
 
   exec {'stop-dcos-agent':
     command     => "systemctl kill -s SIGUSR1 ${dcos_mesos_service} && systemctl stop ${dcos_mesos_service}",
     path        => '/bin:/usr/bin:/usr/sbin',
     refreshonly => true,
+    subscribe   => File['/var/lib/dcos/mesos-slave-common'],
     notify      => Exec['dcos-systemd-reload'],
   }
 
