@@ -4,9 +4,9 @@ class dcos::agent (
 ) inherits ::dcos {
 
   if $public {
-    $dcos_mesos_service = 'dcos-mesos-slave'
-  } else {
     $dcos_mesos_service = 'dcos-mesos-slave-public'
+  } else {
+    $dcos_mesos_service = 'dcos-mesos-slave'
   }
 
   file {'/var/lib/dcos/mesos-slave-common':
