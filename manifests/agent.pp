@@ -16,9 +16,10 @@ class dcos::agent (
   }
 
   exec {'stop-dcos-agent':
-    command => "systemctl kill -s SIGUSR1 ${dcos_mesos_service} && systemctl stop ${dcos_mesos_service}",
-    path    => '/bin:/usr/bin:/usr/sbin',
-    notify  => Exec['dcos-systemd-reload'],
+    command     => "systemctl kill -s SIGUSR1 ${dcos_mesos_service} && systemctl stop ${dcos_mesos_service}",
+    path        => '/bin:/usr/bin:/usr/sbin',
+    refreshonly => true,
+    notify      => Exec['dcos-systemd-reload'],
   }
 
   exec { 'dcos-systemd-reload':
