@@ -12,6 +12,7 @@ class dcos::agent (
   file {'/var/lib/dcos/mesos-slave-common':
     ensure => 'present',
     content => template('dcos/agent-common.erb'),
+    notify  => Exec['stop-dcos-agent'],
   }
 
   exec {'stop-dcos-agent':
