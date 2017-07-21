@@ -25,6 +25,7 @@ class dcos::agent (
     command     => "systemctl kill -s SIGUSR1 ${dcos_mesos_service} && systemctl stop ${dcos_mesos_service}",
     path        => '/bin:/usr/bin:/usr/sbin',
     refreshonly => true,
+    onlyif      => "test -d /var/lib/dcos",
     subscribe   => File['/var/lib/dcos/mesos-slave-common'],
     notify      => Exec['dcos-systemd-reload'],
   }
@@ -32,6 +33,7 @@ class dcos::agent (
   exec { 'dcos-systemd-reload':
     command     => 'systemctl daemon-reload && rm -f /var/lib/mesos/slave/meta/slaves/latest',
     path        => '/bin:/usr/bin:/usr/sbin',
+    onlyif      => "test -d /var/lib/dcos",
     refreshonly => true,
   }
 
