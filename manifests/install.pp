@@ -6,7 +6,7 @@ class dcos::install {
 
   case $::osfamily {
     'Debian': {
-        ensure_packages(['libcurl3-nss','ipset','selinux-utils','curl','unzip'])
+        ensure_packages(['libcurl3-nss','ipset','selinux-utils','curl','unzip','bc'])
 
         # systemd services have hardcoded paths, we need to ensure
         # same paths as on RedHat systems
