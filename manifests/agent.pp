@@ -1,3 +1,5 @@
+# DC/OS agent node
+#
 class dcos::agent (
   $public = false,
   $attributes = {},
@@ -14,8 +16,8 @@ class dcos::agent (
   }
 
   file_line {'default_tasks_max':
-    line      => 'DefaultTasksMax=infinity',
-    path      => '/etc/systemd/system.conf',
+    line => 'DefaultTasksMax=infinity',
+    path => '/etc/systemd/system.conf',
   }
 
   file {'/var/lib/dcos/mesos-slave-common':
@@ -28,7 +30,7 @@ class dcos::agent (
     command     => "systemctl kill -s SIGUSR1 ${dcos_mesos_service} && systemctl stop ${dcos_mesos_service}",
     path        => '/bin:/usr/bin:/usr/sbin',
     refreshonly => true,
-    onlyif      => "test -d /var/lib/dcos",
+    onlyif      => 'test -d /var/lib/dcos',
     subscribe   => File['/var/lib/dcos/mesos-slave-common'],
     notify      => Exec['dcos-systemd-reload'],
   }
@@ -36,7 +38,7 @@ class dcos::agent (
   exec { 'dcos-systemd-reload':
     command     => 'systemctl daemon-reload && rm -f /var/lib/mesos/slave/meta/slaves/latest',
     path        => '/bin:/usr/bin:/usr/sbin',
-    onlyif      => "test -d /var/lib/dcos",
+    onlyif      => 'test -d /var/lib/dcos',
     refreshonly => true,
   }
 
