@@ -13,6 +13,11 @@ class dcos::agent (
     ensure => 'directory',
   }
 
+  file_line {'default_tasks_max':
+    line      => 'DefaultTasksMax=infinity',
+    path      => '/etc/systemd/system.conf',
+  }
+
   file {'/var/lib/dcos/mesos-slave-common':
     ensure  => 'present',
     content => template('dcos/agent-common.erb'),
