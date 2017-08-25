@@ -9,16 +9,14 @@ class dcos::agent (
     $dcos_mesos_service = 'dcos-mesos-slave'
   }
 
-  exec { 'dcos-installed':
-    command => "/bin/true",
-    onlyif => "test -d /var/lib/dcos",
-    path => ["/bin","/usr/bin"],
+  file {'/var/lib/dcos':
+    ensure => 'directory',
   }
 
   file {'/var/lib/dcos/mesos-slave-common':
     ensure  => 'present',
     content => template('dcos/agent-common.erb'),
-    require => Exec['dcos-installed'],
+    require => File['/var/lib/dcos'],
   }
 
   exec {'stop-dcos-agent':
