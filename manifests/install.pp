@@ -4,6 +4,14 @@
 #
 class dcos::install {
 
+  file {'/usr/local/bin/dcos-version':
+    ensure  => 'present',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    source  => 'puppet:///modules/dcos/dcos-version',
+  }
+
   case $::osfamily {
     'Debian': {
         ensure_packages(['libcurl3-nss','ipset','selinux-utils','curl','unzip','bc','tar'])
