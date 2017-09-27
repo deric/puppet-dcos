@@ -1,5 +1,9 @@
 ## puppet-dcos
 
+[![Puppet
+Forge](http://img.shields.io/puppetforge/v/deric/dcos.svg)](https://forge.puppetlabs.com/deric/dcos) [![Build Status](https://travis-ci.org/deric/puppet-dcos.png?branch=master)](https://travis-ci.org/deric/puppet-dcos) [![Puppet Forge
+Downloads](http://img.shields.io/puppetforge/dt/deric/dcos.svg)](https://forge.puppetlabs.com/deric/dcos/scores)
+
 DC/OS nodes management
 
 ## Features
