@@ -13,6 +13,26 @@ describe 'dcos::agent' do
   end
 
 
+  context 'supported operating systems' do
+    on_supported_os.each do |os, facts|
+      context "on #{os}" do
+        let(:facts) do
+          facts
+        end
+
+        context "dcos class without any parameters" do
+          it { is_expected.to compile.with_all_deps }
+
+          it { is_expected.to contain_class('dcos::agent') }
+          it { is_expected.to contain_class('dcos::install') }
+          it { is_expected.to contain_class('dcos::config') }
+
+          it { is_expected.to contain_service('dcos-mesos-slave') }
+        end
+      end
+    end
+  end
+
   context 'installed pre-requisities' do
     it { is_expected.to contain_package('ipset').with_ensure('present') }
     it { is_expected.to contain_package('curl').with_ensure('present') }
@@ -21,6 +41,7 @@ describe 'dcos::agent' do
     it { is_expected.to contain_package('unzip').with_ensure('present') }
     it { is_expected.to contain_package('libcurl3-nss').with_ensure('present') }
     it { is_expected.to contain_package('tar').with_ensure('present') }
+    it { is_expected.to contain_package('xz').with_ensure('present') }
   end
 
   context 'symlinks created' do
