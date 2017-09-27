@@ -21,6 +21,17 @@ class{'dcos::agent':
 }
 ```
 
+Agent accepts `config` hash with `ENV` variables that will override defaults in `/opt/mesosphere/etc/mesos-slave-common`.
+
+Disabling CFS on agent node:
+```puppet
+class{'dcos::agent':
+  config => {
+    'MESOS_CGROUPS_ENABLE_CFS' => false
+  }
+}
+```
+
 Master node:
 
 ```puppet

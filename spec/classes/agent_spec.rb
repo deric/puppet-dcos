@@ -41,7 +41,6 @@ describe 'dcos::agent' do
     it { is_expected.to contain_package('unzip').with_ensure('present') }
     it { is_expected.to contain_package('libcurl3-nss').with_ensure('present') }
     it { is_expected.to contain_package('tar').with_ensure('present') }
-    it { is_expected.to contain_package('xz').with_ensure('present') }
   end
 
   context 'symlinks created' do
@@ -85,6 +84,22 @@ describe 'dcos::agent' do
         'ensure' => 'link',
         'target' => '/usr/sbin/useradd',
       })
+    end
+  end
+
+  context 'CFS' do
+    let :pre_condition do
+      'class {"dcos::agent":
+         config => {
+           "MESOS_CGROUPS_ENABLE_CFS" => false
+         }
+       }'
+    end
+
+    it do
+      is_expected.to contain_file(
+        '/var/lib/dcos/mesos-slave-common'
+      ).with_content(/MESOS_CGROUPS_ENABLE_CFS=false/)
     end
   end
 
