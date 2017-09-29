@@ -57,6 +57,16 @@ dcos::agent::attributes:
   storage: SATA
 ```
 
+## YAML (Hiera/lookup) configuration
+
+Simply use supported parameters:
+```yaml
+dcos::agent::mesos:
+  MESOS_CGROUPS_ENABLE_CFS: false
+dcos::master::mesos:
+  MESOS_QUORUM: 2
+```
+
 ## Limitations
 
 Doesn't handle DC/OS installation, use one of officially supported methods.
