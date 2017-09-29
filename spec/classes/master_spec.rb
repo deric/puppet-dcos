@@ -27,7 +27,7 @@ describe 'dcos::master' do
           it { is_expected.to contain_class('dcos::install') }
           it { is_expected.to contain_class('dcos::config') }
 
-          it { is_expected.to contain_service('dcos-mesos-slave') }
+          it { is_expected.to contain_service('dcos-mesos-master') }
         end
       end
     end
