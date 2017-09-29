@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'dcos::agent' do
+describe 'dcos::master' do
 
   let(:facts) do
     {
@@ -23,7 +23,7 @@ describe 'dcos::agent' do
         context "dcos class without any parameters" do
           it { is_expected.to compile.with_all_deps }
 
-          it { is_expected.to contain_class('dcos::agent') }
+          it { is_expected.to contain_class('dcos::master') }
           it { is_expected.to contain_class('dcos::install') }
           it { is_expected.to contain_class('dcos::config') }
 
@@ -89,36 +89,18 @@ describe 'dcos::agent' do
 
   context 'CFS' do
     let :pre_condition do
-      'class {"dcos::agent":
+      'class {"dcos::master":
          mesos => {
-           "MESOS_CGROUPS_ENABLE_CFS" => false
+           "MESOS_max_completed_frameworks" => 50
          }
        }'
     end
 
     it do
       is_expected.to contain_file(
-        '/var/lib/dcos/mesos-slave-common'
-      ).with_content(/MESOS_CGROUPS_ENABLE_CFS=false/)
+        '/opt/mesosphere/etc/mesos-master-extras'
+      ).with_content(/MESOS_MAX_COMPLETED_FRAMEWORKS=50/)
     end
   end
-
-  context 'attributes' do
-    let :pre_condition do
-      'class {"dcos::agent":
-         attributes => {
-           "dc" => "us-east",
-           "instance" => "large",
-         }
-       }'
-    end
-
-    it do
-      is_expected.to contain_file(
-        '/var/lib/dcos/mesos-slave-common'
-      ).with_content(/MESOS_ATTRIBUTES=dc:us-east;instance:large;/)
-    end
-  end
-
 
 end
