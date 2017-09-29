@@ -3,7 +3,7 @@
 class dcos::agent (
   $public = false,
   $attributes = {},
-  $config = {},
+  $mesos = {},
 ) inherits ::dcos {
 
   if $public {

@@ -1,7 +1,7 @@
 # DC/OS master node
 #
 class dcos::master (
-  $config = {},
+  $mesos = {},
   $service_name = 'dcos-mesos-master',
 ) inherits ::dcos {
 

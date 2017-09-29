@@ -90,7 +90,7 @@ describe 'dcos::agent' do
   context 'CFS' do
     let :pre_condition do
       'class {"dcos::agent":
-         config => {
+         mesos => {
            "MESOS_CGROUPS_ENABLE_CFS" => false
          }
        }'
