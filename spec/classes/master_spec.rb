@@ -113,12 +113,14 @@ describe 'dcos::master' do
         :lsbdistid => 'Debian',
         :puppetversion => Puppet.version,
         :dcos_config_path => '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master',
+        :dcos_adminrouter_path => '/opt/mesosphere/packages/adminrouter--e0de512c046bee17e0d458d10e7c8c2b24f56fc6',
       }
     end
     let :pre_condition do
       'class {"dcos::master":
          manage_adminrouter => true,
          adminrouter => {
+           server_name => "foo.bar",
            ssl_certificate => "/etc/ssl/cert.crt",
            service_name => "mesos.test",
            ssl_certificate_key => "/etc/ssl/cert.key",
@@ -136,6 +138,12 @@ describe 'dcos::master' do
       is_expected.to contain_file(
         '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master/adminrouter-listen-open.conf'
       ).with_content(/^ssl_certificate_key \/etc\/ssl\/cert.key;/)
+    end
+
+    it do
+      is_expected.to contain_file(
+        '/opt/mesosphere/packages/adminrouter--e0de512c046bee17e0d458d10e7c8c2b24f56fc6/nginx/conf/nginx.master.conf'
+      ).with_content(/server_name foo.bar;/)
     end
   end
 

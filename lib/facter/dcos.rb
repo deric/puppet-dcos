@@ -22,3 +22,13 @@ Facter.add(:dcos_config_path) do
     end
   end
 end
+
+Facter.add(:dcos_adminrouter_path) do
+  setcode do
+    adminrouter_file = '/etc/systemd/system/dcos-adminrouter.service'
+    if File.exists?(version_file)
+      service_path = exec("dirname $(readlink -f /etc/systemd/system/dcos-adminrouter.service)")
+      File.expand_path(service_path, '..')
+    end
+  end
+end
