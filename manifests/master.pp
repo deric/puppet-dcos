@@ -2,8 +2,16 @@
 #
 class dcos::master (
   $mesos = {},
+  $manage_adminrouter = false,
   $service_name = 'dcos-mesos-master',
+  $adminrouter = {}
 ) inherits ::dcos {
+
+  if $manage_adminrouter {
+    class{'dcos::adminrouter':
+      config => $adminrouter,
+    }
+  }
 
   file {'/opt/mesosphere/etc/mesos-master-extras':
     ensure  => 'present',

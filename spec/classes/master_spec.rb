@@ -103,4 +103,30 @@ describe 'dcos::master' do
     end
   end
 
+
+  context 'adminrouter' do
+    let :pre_condition do
+      'class {"dcos::master":
+         manage_adminrouter => true,
+         adminrouter => {
+           ssl_certificate => "/etc/ssl/cert.crt",
+           service_name => "mesos.test",
+           ssl_certificate_key => "/etc/ssl/cert.key",
+         },
+       }'
+    end
+
+    it do
+      is_expected.to contain_file(
+        '/opt/mesosphere/etc/adminrouter-listen-open.conf'
+      ).with_content(/^ssl_certificate \/etc\/ssl\/cert.crt;/)
+    end
+
+    it do
+      is_expected.to contain_file(
+        '/opt/mesosphere/etc/adminrouter-listen-open.conf'
+      ).with_content(/^ssl_certificate_key \/etc\/ssl\/cert.key;/)
+    end
+  end
+
 end
