@@ -1,3 +1,5 @@
+#!/bin/ruby
+require 'facter'
 require 'json'
 # Retrieves DC/OS version, if installed
 Facter.add(:dcos_version) do
@@ -8,6 +10,15 @@ Facter.add(:dcos_version) do
       if json.key? 'version'
         Facter::Util::Resolution.exec(json['version'])
       end
+    end
+  end
+end
+
+Facter.add(:dcos_config_path) do
+  setcode do
+    adminrouter_file = '/opt/mesosphere/etc/adminrouter-listen-open.conf'
+    if File.exists?(version_file)
+      exec("dirname $(readlink -f /opt/mesosphere/etc/adminrouter-listen-open.conf)")
     end
   end
 end

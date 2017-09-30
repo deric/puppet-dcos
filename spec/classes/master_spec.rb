@@ -4,12 +4,12 @@ describe 'dcos::master' do
 
   let(:facts) do
     {
-    :operatingsystem => 'Debian',
-    :osfamily => 'Debian',
-    :lsbdistcodename => 'stretch',
-    :lsbdistid => 'Debian',
-    :puppetversion => Puppet.version,
-  }
+      :operatingsystem => 'Debian',
+      :osfamily => 'Debian',
+      :lsbdistcodename => 'stretch',
+      :lsbdistid => 'Debian',
+      :puppetversion => Puppet.version,
+    }
   end
 
 
@@ -105,6 +105,16 @@ describe 'dcos::master' do
 
 
   context 'adminrouter' do
+    let(:facts) do
+      {
+        :operatingsystem => 'Debian',
+        :osfamily => 'Debian',
+        :lsbdistcodename => 'stretch',
+        :lsbdistid => 'Debian',
+        :puppetversion => Puppet.version,
+        :dcos_config_path => '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master',
+      }
+    end
     let :pre_condition do
       'class {"dcos::master":
          manage_adminrouter => true,
@@ -118,13 +128,13 @@ describe 'dcos::master' do
 
     it do
       is_expected.to contain_file(
-        '/opt/mesosphere/etc/adminrouter-listen-open.conf'
+        '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master/adminrouter-listen-open.conf'
       ).with_content(/^ssl_certificate \/etc\/ssl\/cert.crt;/)
     end
 
     it do
       is_expected.to contain_file(
-        '/opt/mesosphere/etc/adminrouter-listen-open.conf'
+        '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master/adminrouter-listen-open.conf'
       ).with_content(/^ssl_certificate_key \/etc\/ssl\/cert.key;/)
     end
   end
