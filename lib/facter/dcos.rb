@@ -8,7 +8,7 @@ Facter.add(:dcos_version) do
     if File.exists?(version_file)
       json = JSON.parse(File.read(version_file))
       if json.key? 'version'
-        Facter::Util::Resolution.exec(json['version'])
+        json['version']
       end
     end
   end
@@ -18,7 +18,7 @@ Facter.add(:dcos_config_path) do
   setcode do
     adminrouter_file = '/opt/mesosphere/etc/adminrouter-listen-open.conf'
     if File.exists?(adminrouter_file)
-      exec("dirname $(readlink -f #{adminrouter_file})")
+      Facter::Util::Resolution.exec("dirname $(readlink -f #{adminrouter_file})")
     end
   end
 end
@@ -27,8 +27,8 @@ Facter.add(:dcos_adminrouter_path) do
   setcode do
     adminrouter_service = '/etc/systemd/system/dcos-adminrouter.service'
     if File.exists?(adminrouter_service)
-      service_path = exec("dirname $(readlink -f #{adminrouter_service})")
-      File.expand_path(service_path, '..')
+      service_path = Facter::Util::Resolution.exec("dirname $(readlink -f #{adminrouter_service})")
+      File.expand_path('..', service_path)
     end
   end
 end
