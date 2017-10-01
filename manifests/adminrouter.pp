@@ -13,6 +13,7 @@ class dcos::adminrouter (
   $server_name = pick($config['server_name'], 'master.mesos')
   $ssl_certificate = pick($config['ssl_certificate'], 'includes/snakeoil.crt')
   $ssl_certificate_key = pick($config['ssl_certificate_key'], 'includes/snakeoil.key')
+  $default_scheme = pick($config['default_scheme'], 'http')
 
   $config_dir = $::dcos_config_path
   $adminrouter_path = $::dcos_adminrouter_path
