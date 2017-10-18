@@ -8,7 +8,9 @@ class dcos (
 
 ) inherits ::dcos::params {
 
-  class { '::dcos::install': }
+  include dcos::install
+
+  Class['::dcos::install']
   -> class { '::dcos::config': }
   -> Class['::dcos']
 }

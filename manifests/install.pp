@@ -4,6 +4,8 @@
 #
 class dcos::install {
 
+  anchor { 'dcos::install::begin': }
+
   file {'/usr/local/bin/dcos-version':
     ensure  => 'present',
     owner   => 'root',
@@ -12,47 +14,22 @@ class dcos::install {
     source  => 'puppet:///modules/dcos/dcos-version',
   }
 
+  # prerequisities
   case $::osfamily {
     'Debian': {
-        ensure_packages(['libcurl3-nss','ipset','selinux-utils','curl','unzip','bc','tar'])
-
-        # systemd services have hardcoded paths, we need to ensure
-        # same paths as on RedHat systems
-        file { '/usr/bin/bash':
-          ensure => link,
-          target => '/bin/bash',
-        }
-
-        file { '/usr/bin/rm':
-          ensure => link,
-          target => '/bin/rm',
-        }
-
-        file { '/usr/bin/tar':
-          ensure => link,
-          target => '/bin/tar',
-        }
-
-        file { '/usr/bin/mkdir':
-          ensure => link,
-          target => '/bin/mkdir',
-        }
-
-        file { '/usr/bin/ln':
-          ensure => link,
-          target => '/bin/ln',
-        }
-
-        file { '/sbin/useradd':
-          ensure => link,
-          target => '/usr/sbin/useradd',
-        }
+      include dcos::os::debian
+      Class['dcos::os::debian']
+      -> Anchor['dcos::install::begin']
     }
     'RedHat', 'Amazon': {
-      ensure_packages(['tar','xz','unzip','curl','ipset'])
+      include dcos::os::redhat
+      Class['dcos::os::redhat']
+      -> Anchor['dcos::install::begin']
     }
     default: {
-      fail("${::operatingsystem} not supported")
+      fail("${::osfamily} not supported")
     }
   }
+
+  anchor { 'dcos::install::end': }
 }
