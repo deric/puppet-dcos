@@ -85,6 +85,13 @@ describe 'dcos::agent' do
         'target' => '/usr/sbin/useradd',
       })
     end
+
+    it do
+      is_expected.to contain_file('/usr/sbin/ipset').with({
+        'ensure' => 'link',
+        'target' => '/sbin/ipset',
+      })
+    end
   end
 
   context 'CFS' do

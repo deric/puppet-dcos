@@ -36,4 +36,9 @@ class dcos::os::debian {
     ensure => link,
     target => '/usr/sbin/useradd',
   }
+
+  file { '/usr/sbin/ipset':
+    ensure => link,
+    target => '/sbin/ipset',
+  }
 }
