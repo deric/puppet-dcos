@@ -35,7 +35,7 @@ class dcos::install {
     include '::archive'
     $download_url = "${::dcos::bootstrap_url}/${::dcos::bootstrap_script}"
 
-    archive { 'dcos_install.sh':
+    archive { "${::dcos::download_dir}/dcos_install.sh":
       ensure        => present,
       user          => 'root',
       group         => 'root',
@@ -47,7 +47,7 @@ class dcos::install {
       cleanup       => false,
       require       => Anchor['dcos::install::begin'],
     }
-    Archive['dcos_install.sh']
+    Archive["${::dcos::download_dir}/dcos_install.sh"]
     -> Anchor['dcos::install::end']
 
   }
