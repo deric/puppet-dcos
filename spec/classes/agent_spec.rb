@@ -120,5 +120,30 @@ describe 'dcos::agent' do
     end
   end
 
+  context 'installation from bootstrap url' do
+    let :pre_condition do
+      'class {"dcos":
+        bootstrap_url => "http://192.168.1.1:9090",
+        install_checksum => {
+          type => "sha1",
+          hash => "43d6a53813bd9c68e26d0b3b8d8338182017dbb8"
+        },
+      }
+      class {"dcos::agent": }'
+    end
+
+    it do
+      is_expected.to contain_archive(
+        "/tmp/dcos/dcos_install.sh"
+      ).with({
+        'source' => 'http://192.168.1.1:9090/dcos_install.sh',
+      })
+    end
+
+    it do
+      is_expected.to contain_anchor('dcos::install::begin')
+    end
+
+  end
 
 end

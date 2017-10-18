@@ -32,7 +32,6 @@ class dcos::install {
   }
 
   if $::dcos::bootstrap_url {
-    include '::archive'
     $download_url = "${::dcos::bootstrap_url}/${::dcos::bootstrap_script}"
 
     archive { "${::dcos::download_dir}/dcos_install.sh":
