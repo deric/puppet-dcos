@@ -12,3 +12,5 @@
 .yardoc
 coverage
 .rake_tasks~
+/.librarian
+/.tmp
