@@ -18,10 +18,10 @@ class dcos::agent (
 
   if $::dcos::bootstrap_url {
     exec { 'dcos agent install':
-      command     => 'bash ${::dcos::download_dir}/dcos_install.sh ${role}',
+      command     => "bash ${::dcos::download_dir}/dcos_install.sh ${role}",
       path        => '/bin:/usr/bin:/usr/sbin',
       onlyif      => 'test ! -d /opt/mesosphere',
-      refreshonly => true,
+      refreshonly => false,
       before      => Anchor['dcos::agent::installed'],
     }
   }

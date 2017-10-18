@@ -11,14 +11,13 @@ class dcos::master (
 
   if $::dcos::bootstrap_url {
     exec { 'dcos master install':
-      command     => 'bash ${::dcos::download_dir}/dcos_install.sh master',
+      command     => "bash ${::dcos::download_dir}/dcos_install.sh master",
       path        => '/bin:/usr/bin:/usr/sbin',
       onlyif      => 'test ! -d /opt/mesosphere',
-      refreshonly => true,
+      refreshonly => false,
       before      => Anchor['dcos::master::installed'],
     }
   }
-
 
   if $manage_adminrouter {
     class{'dcos::adminrouter':
