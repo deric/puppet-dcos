@@ -4,5 +4,6 @@
 # It sets variables according to platform.
 #
 class dcos::params {
-
+  $bootstrap_script = 'dcos_install.sh'
+  $download_dir = '/tmp/dcos'
 }

@@ -31,5 +31,26 @@ class dcos::install {
     }
   }
 
+  if $::dcos::bootstrap_url {
+    include '::archive'
+    $download_url = "${::dcos::bootstrap_url}/${::dcos::bootstrap_script}"
+
+    archive { 'dcos_install.sh':
+      ensure        => present,
+      user          => 'root',
+      group         => 'root',
+      source        => $download_url,
+      checksum      => $::dcos::install_checksum['hash'],
+      checksum_type => $::dcos::install_checksum['type'],
+      creates       => "${::dcos::download_dir}/dcos_install.sh",
+      extract       => false,
+      cleanup       => false,
+      require       => Anchor['dcos::install::begin'],
+    }
+    Archive['dcos_install.sh']
+    -> Anchor['dcos::install::end']
+
+  }
+
   anchor { 'dcos::install::end': }
 }

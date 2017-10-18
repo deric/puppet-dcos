@@ -7,9 +7,23 @@ class dcos::master (
   $adminrouter = {}
 ) inherits ::dcos {
 
+  anchor { 'dcos::master::installed': }
+
+  if $::dcos::bootstrap_url {
+    exec { 'dcos master install':
+      command     => 'bash ${::dcos::download_dir}/dcos_install.sh master',
+      path        => '/bin:/usr/bin:/usr/sbin',
+      onlyif      => 'test ! -d /opt/mesosphere',
+      refreshonly => true,
+      before      => Anchor['dcos::master::installed'],
+    }
+  }
+
+
   if $manage_adminrouter {
     class{'dcos::adminrouter':
-      config => $adminrouter,
+      config  => $adminrouter,
+      require => Anchor['dcos::agent::installed'],
     }
   }
 
@@ -24,7 +38,7 @@ class dcos::master (
     hasstatus  => true,
     hasrestart => true,
     enable     => true,
-    require    => File['/opt/mesosphere/etc/mesos-master-extras'],
+    require    => [File['/opt/mesosphere/etc/mesos-master-extras'],Anchor['dcos::master::installed']],
   }
 
 }

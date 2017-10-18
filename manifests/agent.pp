@@ -6,10 +6,24 @@ class dcos::agent (
   $mesos = {},
 ) inherits ::dcos {
 
+  anchor { 'dcos::agent::installed': }
+
   if $public {
     $dcos_mesos_service = 'dcos-mesos-slave-public'
+    $role = 'slave_public'
   } else {
     $dcos_mesos_service = 'dcos-mesos-slave'
+    $role = 'slave'
+  }
+
+  if $::dcos::bootstrap_url {
+    exec { 'dcos agent install':
+      command     => 'bash ${::dcos::download_dir}/dcos_install.sh ${role}',
+      path        => '/bin:/usr/bin:/usr/sbin',
+      onlyif      => 'test ! -d /opt/mesosphere',
+      refreshonly => true,
+      before      => Anchor['dcos::agent::installed'],
+    }
   }
 
   file {'/var/lib/dcos':
@@ -34,6 +48,7 @@ class dcos::agent (
     onlyif      => 'test -d /var/lib/dcos',
     subscribe   => File['/var/lib/dcos/mesos-slave-common'],
     notify      => Exec['dcos-systemd-reload'],
+    require     => Anchor['dcos::agent::installed'],
   }
 
   exec { 'dcos-systemd-reload':
@@ -41,6 +56,7 @@ class dcos::agent (
     path        => '/bin:/usr/bin:/usr/sbin',
     onlyif      => 'test -d /var/lib/dcos',
     refreshonly => true,
+    require     => Anchor['dcos::agent::installed'],
   }
 
   service { $dcos_mesos_service:
@@ -48,5 +64,6 @@ class dcos::agent (
     hasstatus  => true,
     hasrestart => true,
     enable     => true,
+    require    => Anchor['dcos::agent::installed'],
   }
 }
