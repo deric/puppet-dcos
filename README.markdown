@@ -93,6 +93,13 @@ dcos::agent::attributes:
   storage: SATA
 ```
 
+also existing facts can be easily used:
+```yaml
+dcos::agent::attributes:
+  arch: "%{::architecture}"
+  hostname: "%{::fqdn}"
+```
+
 ## YAML (Hiera/lookup) configuration
 
 Simply use supported parameters:
