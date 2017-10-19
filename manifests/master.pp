@@ -20,7 +20,7 @@ class dcos::master (
   }
 
   if $manage_adminrouter {
-    class{'dcos::adminrouter':
+    class{'::dcos::adminrouter':
       config  => $adminrouter,
       require => Anchor['dcos::agent::installed'],
     }
