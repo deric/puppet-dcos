@@ -18,6 +18,10 @@ DC/OS nodes management
 When bootstrap URL is given, Puppet will try to install DC/OS (in case that there's no previous installation in `/opt/mesosphere`):
 ```yaml
 dcos::bootstrap_url: 'http://192.168.1.1:9090'
+# checksum of dcos_install.sh
+dcos::install_checksum:
+  type: 'sha1'
+  hash: '43d6a53813bd9c68e26d0b3b8d8338182017dbb8'
 ```
 then simply include DC/OS into node's definition. For master node:
 ```puppet
