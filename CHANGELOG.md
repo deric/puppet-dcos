@@ -1,3 +1,14 @@
+## [2017-09-27] Release 0.3.0
+ * [full changes](https://github.com/deric/puppet-dcos/compare/v0.2.1...v0.3.0)
+
+### Features
+ * support installation from bootstrap server
+ * experimental: provide SSL certificate for adminrouter
+
+### Bugfix
+ * fixed `ipset` symlink on Debian
+ * fixed resolving DC/OS in Puppet fact
+
 ## [2017-09-27] Release 0.2.1
  * [full changes](https://github.com/deric/puppet-dcos/compare/v0.2.0...v0.2.1)
  * renamed `config` hash to `mesos` (for both master and agent)
