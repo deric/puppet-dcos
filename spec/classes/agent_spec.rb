@@ -169,6 +169,17 @@ describe 'dcos::agent' do
       is_expected.to contain_anchor('dcos::install::begin')
     end
 
+    it do
+      is_expected.to contain_exec('dcos agent install').with({
+        'command' => 'bash /tmp/dcos/dcos_install.sh slave'
+      })
+    end
+
+    it do
+      is_expected.to contain_exec('dcos agent install')
+        .that_comes_before('Anchor[dcos::agent::installed]')
+    end
+
   end
 
 end
