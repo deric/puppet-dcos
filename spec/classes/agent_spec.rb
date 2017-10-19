@@ -171,7 +171,7 @@ describe 'dcos::agent' do
 
     it do
       is_expected.to contain_exec('dcos agent install').with({
-        'command' => 'bash /tmp/dcos/dcos_install.sh slave'
+        'command' => 'bash /tmp/dcos/dcos_install.sh slave',
       })
     end
 

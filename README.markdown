@@ -35,6 +35,18 @@ Role `slave_public` can be also configured in Hiera backend:
 dcos::agent::public: true
 ```
 
+You can also provide checksums for installation script:
+```puppet
+
+class {'dcos':
+  bootstrap_url => 'http://192.168.1.1:9090',
+  install_checksum => {
+    type => 'sha1',
+    hash => '43d6a53813bd9c68e26d0b3b8d8338182017dbb8'
+  },
+}
+```
+
 ## Usage
 
 Private DC/OS agent:
