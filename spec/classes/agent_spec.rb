@@ -4,94 +4,112 @@ describe 'dcos::agent' do
 
   let(:facts) do
     {
-    :operatingsystem => 'Debian',
-    :osfamily => 'Debian',
-    :lsbdistcodename => 'stretch',
-    :lsbdistid => 'Debian',
-    :puppetversion => Puppet.version,
-  }
+      :operatingsystem => 'RedHat',
+      :osfamily => 'RedHat',
+      :puppetversion => Puppet.version,
+    }
   end
 
+  context 'on RedHat based systems' do
+    it { is_expected.to compile.with_all_deps }
 
-  context 'supported operating systems' do
-    on_supported_os.each do |os, facts|
-      context "on #{os}" do
-        let(:facts) do
-          facts
-        end
+    it { is_expected.to contain_class('dcos::agent') }
+    it { is_expected.to contain_class('dcos::install') }
+    it { is_expected.to contain_class('dcos::config') }
+    it { is_expected.to contain_class('dcos::os::redhat') }
 
-        context "dcos class without any parameters" do
-          it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_service('dcos-mesos-slave') }
 
-          it { is_expected.to contain_class('dcos::agent') }
-          it { is_expected.to contain_class('dcos::install') }
-          it { is_expected.to contain_class('dcos::config') }
+    context 'installed pre-requisities' do
+      it { is_expected.to contain_package('tar').with_ensure('present') }
+      it { is_expected.to contain_package('ipset').with_ensure('present') }
+      it { is_expected.to contain_package('curl').with_ensure('present') }
+      it { is_expected.to contain_package('xz').with_ensure('present') }
+      it { is_expected.to contain_package('unzip').with_ensure('present') }
+    end
+  end
 
-          it { is_expected.to contain_service('dcos-mesos-slave') }
-        end
+  context 'on Debian based systems' do
+    let(:facts) do
+      {
+        :operatingsystem => 'Debian',
+        :osfamily => 'Debian',
+        :lsbdistcodename => 'stretch',
+        :lsbdistid => 'Debian',
+        :puppetversion => Puppet.version,
+      }
+    end
+
+    it { is_expected.to compile.with_all_deps }
+
+    it { is_expected.to contain_class('dcos::agent') }
+    it { is_expected.to contain_class('dcos::install') }
+    it { is_expected.to contain_class('dcos::config') }
+    it { is_expected.to contain_class('dcos::os::debian') }
+
+    it { is_expected.to contain_service('dcos-mesos-slave') }
+
+    context 'installed pre-requisities' do
+      it { is_expected.to contain_package('ipset').with_ensure('present') }
+      it { is_expected.to contain_package('curl').with_ensure('present') }
+      it { is_expected.to contain_package('bc').with_ensure('present') }
+      it { is_expected.to contain_package('selinux-utils').with_ensure('present') }
+      it { is_expected.to contain_package('unzip').with_ensure('present') }
+      it { is_expected.to contain_package('libcurl3-nss').with_ensure('present') }
+      it { is_expected.to contain_package('tar').with_ensure('present') }
+    end
+
+    context 'symlinks created' do
+      it do
+        is_expected.to contain_file('/usr/bin/bash').with({
+          'ensure' => 'link',
+          'target' => '/bin/bash',
+        })
+      end
+
+      it do
+        is_expected.to contain_file('/usr/bin/rm').with({
+          'ensure' => 'link',
+          'target' => '/bin/rm',
+        })
+      end
+
+      it do
+        is_expected.to contain_file('/usr/bin/tar').with({
+          'ensure' => 'link',
+          'target' => '/bin/tar',
+        })
+      end
+
+      it do
+        is_expected.to contain_file('/usr/bin/mkdir').with({
+          'ensure' => 'link',
+          'target' => '/bin/mkdir',
+        })
+      end
+
+      it do
+        is_expected.to contain_file('/usr/bin/ln').with({
+          'ensure' => 'link',
+          'target' => '/bin/ln',
+        })
+      end
+
+      it do
+        is_expected.to contain_file('/sbin/useradd').with({
+          'ensure' => 'link',
+          'target' => '/usr/sbin/useradd',
+        })
+      end
+
+      it do
+        is_expected.to contain_file('/usr/sbin/ipset').with({
+          'ensure' => 'link',
+          'target' => '/sbin/ipset',
+        })
       end
     end
-  end
 
-  context 'installed pre-requisities' do
-    it { is_expected.to contain_package('ipset').with_ensure('present') }
-    it { is_expected.to contain_package('curl').with_ensure('present') }
-    it { is_expected.to contain_package('bc').with_ensure('present') }
-    it { is_expected.to contain_package('selinux-utils').with_ensure('present') }
-    it { is_expected.to contain_package('unzip').with_ensure('present') }
-    it { is_expected.to contain_package('libcurl3-nss').with_ensure('present') }
-    it { is_expected.to contain_package('tar').with_ensure('present') }
-  end
-
-  context 'symlinks created' do
-    it do
-      is_expected.to contain_file('/usr/bin/bash').with({
-        'ensure' => 'link',
-        'target' => '/bin/bash',
-      })
-    end
-
-    it do
-      is_expected.to contain_file('/usr/bin/rm').with({
-        'ensure' => 'link',
-        'target' => '/bin/rm',
-      })
-    end
-
-    it do
-      is_expected.to contain_file('/usr/bin/tar').with({
-        'ensure' => 'link',
-        'target' => '/bin/tar',
-      })
-    end
-
-    it do
-      is_expected.to contain_file('/usr/bin/mkdir').with({
-        'ensure' => 'link',
-        'target' => '/bin/mkdir',
-      })
-    end
-
-    it do
-      is_expected.to contain_file('/usr/bin/ln').with({
-        'ensure' => 'link',
-        'target' => '/bin/ln',
-      })
-    end
-
-    it do
-      is_expected.to contain_file('/sbin/useradd').with({
-        'ensure' => 'link',
-        'target' => '/usr/sbin/useradd',
-      })
-    end
-
-    it do
-      is_expected.to contain_file('/usr/sbin/ipset').with({
-        'ensure' => 'link',
-        'target' => '/sbin/ipset',
-      })
-    end
   end
 
   context 'CFS' do
