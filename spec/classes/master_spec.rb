@@ -169,6 +169,33 @@ describe 'dcos::master' do
         '/opt/mesosphere/packages/adminrouter--e0de512c046bee17e0d458d10e7c8c2b24f56fc6/nginx/conf/nginx.master.conf'
       ).with_content(/server_name foo.bar;/)
     end
+
+    it do
+      is_expected.not_to contain_file(
+        '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master/../etc/adminrouter.env'
+      ).with_content(/DEFAULT_SCHEME/)
+    end
+
+    context 'force https' do
+      let :pre_condition do
+        'class {"dcos::master":
+           manage_adminrouter => true,
+           adminrouter => {
+             server_name => "foo.bar",
+             ssl_certificate => "/etc/ssl/cert.crt",
+             service_name => "mesos.test",
+             ssl_certificate_key => "/etc/ssl/cert.key",
+             default_scheme => "https://",
+           },
+         }'
+      end
+
+        it do
+          is_expected.to contain_file(
+            '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master/../etc/adminrouter.env'
+          ).with_content(/DEFAULT_SCHEME=https:\/\//)
+        end
+    end
   end
 
   context 'installation from bootstrap url' do
