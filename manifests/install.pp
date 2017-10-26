@@ -35,16 +35,21 @@ class dcos::install {
     $download_url = "${::dcos::bootstrap_url}/${::dcos::bootstrap_script}"
 
     archive { "${::dcos::download_dir}/dcos_install.sh":
-      ensure        => present,
-      user          => 'root',
-      group         => 'root',
-      source        => $download_url,
-      creates       => "${::dcos::download_dir}/dcos_install.sh",
-      extract       => false,
-      cleanup       => false,
-      checksum      => $::dcos::install_checksum['hash'],
-      checksum_type => $::dcos::install_checksum['type'],
-      require       => Anchor['dcos::install::begin'],
+      ensure  => present,
+      user    => 'root',
+      group   => 'root',
+      source  => $download_url,
+      creates => "${::dcos::download_dir}/dcos_install.sh",
+      extract => false,
+      cleanup => false,
+      require => Anchor['dcos::install::begin'],
+    }
+
+    if !empty($::dcos::install_checksum) {
+      Archive<| title == "${::dcos::download_dir}/dcos_install.sh" |> {
+        checksum      => $::dcos::install_checksum['hash'],
+        checksum_type => $::dcos::install_checksum['type']
+      }
     }
 
     Archive["${::dcos::download_dir}/dcos_install.sh"]
