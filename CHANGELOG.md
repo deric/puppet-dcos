@@ -1,4 +1,10 @@
 ## [2017-09-27] Release 0.3.0
+ * [full changes](https://github.com/deric/puppet-dcos/compare/v0.3.0...v0.3.1)
+
+### Bugfix
+ * fix incorrect anchor
+
+## [2017-09-27] Release 0.3.0
  * [full changes](https://github.com/deric/puppet-dcos/compare/v0.2.1...v0.3.0)
 
 ### Features
