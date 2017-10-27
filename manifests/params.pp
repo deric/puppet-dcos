@@ -10,4 +10,23 @@ class dcos::params {
     'hash' => undef,
     'type' => undef,
   }
+  case $::osfamily {
+    'Debian': {
+      $executor = {
+        "PATH" => "/usr/bin:/bin",
+        "SHELL" => "/usr/bash",
+        "LIBPROCESS_NUM_WORKER_THREADS" => "8"
+      }
+    }
+    'RedHat', 'Amazon': {
+      $executor = {
+        "PATH" => "/usr/bin:/bin",
+        "SHELL" => "/usr/bin/bash",
+        "LIBPROCESS_NUM_WORKER_THREADS" => "8"
+      }
+    }
+    default: {
+      $executor = {}
+    }
+  }
 }

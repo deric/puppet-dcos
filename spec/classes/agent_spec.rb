@@ -112,6 +112,20 @@ describe 'dcos::agent' do
 
   end
 
+  context 'mesos executor' do
+    let :pre_condition do
+      'class {"dcos::agent":
+        executor => {"foo" => "bar"}
+      }'
+    end
+
+    it do
+      is_expected.to contain_file(
+        '/opt/mesosphere/etc/mesos-executor-environment.json'
+      ).with_content(/\{"foo":"bar"\}/)
+    end
+  end
+
   context 'CFS' do
     let :pre_condition do
       'class {"dcos::agent":

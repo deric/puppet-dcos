@@ -4,6 +4,7 @@ class dcos::agent (
   $public = false,
   $attributes = {},
   $mesos = {},
+  $executor = $::dcos::params::executor,
 ) inherits ::dcos {
 
   anchor { 'dcos::agent::installed': }
@@ -24,6 +25,12 @@ class dcos::agent (
       refreshonly => false,
       before      => Anchor['dcos::agent::installed'],
     }
+  }
+
+  file {'/opt/mesosphere/etc/mesos-executor-environment.json':
+    ensure  => 'present',
+    content => dcos_sorted_json($executor),
+    require => Anchor['dcos::agent::installed'],
   }
 
   file {'/var/lib/dcos':
