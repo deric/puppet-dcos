@@ -2,11 +2,6 @@ require 'json'
 
 def sorted_generate(obj)
   case obj
-    when Fixnum, Float, TrueClass, FalseClass, NilClass
-      return obj.to_json
-    when String
-      # Convert quoted integers (string) to int
-      return (obj.match(/\A[-]?[0-9]+\z/) ? obj.to_i : obj).to_json
     when Array
       arrayRet = []
       obj.each do |a|
@@ -16,11 +11,13 @@ def sorted_generate(obj)
     when Hash
       ret = []
       obj.keys.sort.each do |k|
-        ret.push(k.to_json << ":" << sorted_generate(obj[k]))
+        ret.push("#{k.to_json}:#{sorted_generate(obj[k].to_json)}")
       end
       return "{" << ret.join(",") << "}";
+    when String
+      return obj.to_json
     else
-      raise Exception("Unable to handle object of type <%s>" % obj.class.to_s)
+      return obj.to_json
   end
 end # end def
 

@@ -117,14 +117,14 @@ describe 'dcos::agent' do
   context 'mesos executor' do
     let :pre_condition do
       'class {"dcos::agent":
-        executor => {"foo" => "bar"}
+        executor => {"foo" => 6}
       }'
     end
 
     it do
       is_expected.to contain_file(
         '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master/../etc/mesos-executor-environment.json'
-      ).with_content(/\{"foo":"bar"\}/)
+      ).with_content(/\{"foo":"6"\}/)
     end
   end
 
