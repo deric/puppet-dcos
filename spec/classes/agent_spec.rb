@@ -117,7 +117,7 @@ describe 'dcos::agent' do
   context 'mesos executor' do
     let :pre_condition do
       'class {"dcos::agent":
-        executor => {"foo" => 6}
+        executor => {"foo" => "6"}
       }'
     end
 
