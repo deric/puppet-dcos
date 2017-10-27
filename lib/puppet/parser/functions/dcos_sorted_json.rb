@@ -11,7 +11,7 @@ def sorted_generate(obj)
     when Hash
       ret = []
       obj.keys.sort.each do |k|
-        ret.push("#{k.to_json}:#{sorted_generate(obj[k].to_json)}")
+        ret.push(k.to_json << ":#{sorted_generate(obj[k])}")
       end
       return "{" << ret.join(",") << "}";
     when String
