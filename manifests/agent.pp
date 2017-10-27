@@ -27,7 +27,9 @@ class dcos::agent (
     }
   }
 
-  file {'/opt/mesosphere/etc/mesos-executor-environment.json':
+  $config_dir = $::dcos_config_path
+
+  file {"${config_dir}/../etc/mesos-executor-environment.json":
     ensure  => 'present',
     content => dcos_sorted_json($executor),
     require => Anchor['dcos::agent::installed'],

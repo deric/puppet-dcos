@@ -7,6 +7,7 @@ describe 'dcos::agent' do
       :operatingsystem => 'RedHat',
       :osfamily => 'RedHat',
       :puppetversion => Puppet.version,
+      :dcos_config_path => '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master',
     }
   end
 
@@ -37,6 +38,7 @@ describe 'dcos::agent' do
         :lsbdistcodename => 'stretch',
         :lsbdistid => 'Debian',
         :puppetversion => Puppet.version,
+        :dcos_config_path => '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master',
       }
     end
 
@@ -121,7 +123,7 @@ describe 'dcos::agent' do
 
     it do
       is_expected.to contain_file(
-        '/opt/mesosphere/etc/mesos-executor-environment.json'
+        '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master/../etc/mesos-executor-environment.json'
       ).with_content(/\{"foo":"bar"\}/)
     end
   end
