@@ -6,4 +6,8 @@
 class dcos::params {
   $bootstrap_script = 'dcos_install.sh'
   $download_dir = '/tmp/dcos'
+  $install_checksum = {
+    'hash' => undef,
+    'type' => undef,
+  }
 }

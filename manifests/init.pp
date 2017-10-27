@@ -31,7 +31,7 @@ class dcos (
   $bootstrap_url    = undef,
   $bootstrap_script = $::dcos::params::bootstrap_script,
   $download_dir     = $::dcos::params::download_dir,
-  $install_checksum = {},
+  $install_checksum = $::dcos::params::install_checksum,
 ) inherits ::dcos::params {
 
   include ::dcos::install
