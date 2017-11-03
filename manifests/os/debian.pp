@@ -5,6 +5,16 @@
 class dcos::os::debian {
   ensure_packages(['libcurl3-nss','ipset','selinux-utils','curl','unzip','bc','tar'])
 
+  # make sure to try system library first
+  file_line { 'update LD_PATH /opt/mesosphere/environment':
+    path => '/opt/mesosphere/environment',
+    line => 'LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/opt/mesosphere/lib',
+    match   => '^LD_LIBRARY_PATH=*',
+    replace => true,
+  }
+  # libraries dynamically linked to mesos:
+  ensure_packages(['libsvn1','libapr1'])
+
   # systemd services have hardcoded paths, we need to ensure
   # the same paths as on RedHat systems
   file { '/usr/bin/bash':
