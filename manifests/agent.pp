@@ -27,6 +27,20 @@ class dcos::agent (
     }
   }
 
+  case $::osfamily {
+    'Debian': {
+      # make sure to try system library first
+      file_line { 'update LD_PATH /opt/mesosphere/environment':
+        path => '/opt/mesosphere/environment',
+        line => 'LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/opt/mesosphere/lib',
+        match   => '^LD_LIBRARY_PATH=*',
+        replace => true,
+        require => Anchor['dcos::agent::installed'],
+      }
+    }
+  }
+
+
   $config_dir = $::dcos_config_path
 
   file {"${config_dir}/../etc/mesos-executor-environment.json":
