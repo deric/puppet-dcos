@@ -40,6 +40,9 @@ class dcos::agent (
     }
   }
 
+  # needed for VIPs: https://github.com/dcos/minuteman
+  kmod::load { 'ip_vs_wlc': }
+  kmod::load { 'dummy': }
 
   $config_dir = $::dcos_config_path
 
