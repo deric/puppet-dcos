@@ -3,7 +3,7 @@
 # WARNING: Debian is not officially supported, not everything is guaranteed to work!
 
 class dcos::os::debian {
-  ensure_packages(['libcurl3-nss','ipset','selinux-utils','curl','unzip','bc','tar'])
+  ensure_packages(['libcurl3-nss','ipset','selinux-utils','curl','unzip','bc','tar','ipvsadm'])
 
   # libraries dynamically linked to mesos:
   ensure_packages(['libsvn1','libapr1'])
