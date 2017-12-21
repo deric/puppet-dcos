@@ -1,4 +1,11 @@
-## [2017-09-27] Release 0.3.0
+## [2017-12-21] Release 0.4.0
+ * update LD_LIBRARY_PATH on Debian
+ * load necessary kernel modules for Navstar (formerly Minuteman in DC/OS 1.9)
+ * install admin tool `ipvsadm` for VLANs (useful for debugging)
+
+ * [full changes](https://github.com/deric/puppet-dcos/compare/v0.3.1...v0.4.0)
+
+## [2017-09-27] Release 0.3.1
  * [full changes](https://github.com/deric/puppet-dcos/compare/v0.3.0...v0.3.1)
 
 ### Bugfix
