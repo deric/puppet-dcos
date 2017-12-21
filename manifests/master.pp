@@ -21,15 +21,17 @@ class dcos::master (
 
   case $::osfamily {
     'Debian': {
+      # needed for DC/OS < 1.11
       # make sure to try system library first
       file_line { 'update LD_PATH /opt/mesosphere/environment':
-        path => '/opt/mesosphere/environment',
-        line => 'LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/opt/mesosphere/lib',
+        path    => '/opt/mesosphere/environment',
+        line    => 'LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/opt/mesosphere/lib',
         match   => '^LD_LIBRARY_PATH=*',
         replace => true,
         require => Anchor['dcos::master::installed'],
       }
     }
+    default: { }
   }
 
   if $manage_adminrouter {
