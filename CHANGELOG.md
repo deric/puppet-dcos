@@ -1,5 +1,11 @@
+## [2017-12-22] Release 0.4.1
+ * remove kmod dependency (modules should be loaded by navstar)
+ * restart Mesos slave upon config changes
+
+ * [full changes](https://github.com/deric/puppet-dcos/compare/v0.4.0...v0.4.1)
+
 ## [2017-12-21] Release 0.4.0
- * update LD_LIBRARY_PATH on Debian
+ * update `LD_LIBRARY_PATH` on Debian
  * load necessary kernel modules for Navstar (formerly Minuteman in DC/OS 1.9)
  * install admin tool `ipvsadm` for VLANs (useful for debugging)
 
