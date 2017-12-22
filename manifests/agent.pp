@@ -42,10 +42,6 @@ class dcos::agent (
     default: { }
   }
 
-  # needed for VIPs: https://github.com/dcos/minuteman
-  kmod::load { 'ip_vs_wlc': }
-  kmod::load { 'dummy': }
-
   $config_dir = $::dcos_config_path
 
   file {"${config_dir}/../etc/mesos-executor-environment.json":
