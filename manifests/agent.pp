@@ -51,6 +51,7 @@ class dcos::agent (
   file {"${config_dir}/../etc/mesos-executor-environment.json":
     ensure  => 'present',
     content => dcos_sorted_json($executor),
+    notify  => Service[$dcos_mesos_service],
     require => Anchor['dcos::agent::installed'],
   }
 
@@ -66,6 +67,7 @@ class dcos::agent (
   file {'/var/lib/dcos/mesos-slave-common':
     ensure  => 'present',
     content => template('dcos/agent-common.erb'),
+    notify  => Service[$dcos_mesos_service],
     require => File['/var/lib/dcos'],
   }
 
