@@ -1,8 +1,13 @@
-## [2017-12-22] Release 0.4.1
+## [2018-08-20] Release 0.4.3
+ * install DC/OS only into a non-empty directory (#1)
+
+ * [full changes](https://github.com/deric/puppet-dcos/compare/v0.4.2...v0.4.3)
+
+## [2017-12-22] Release 0.4.2
  * remove kmod dependency (modules should be loaded by navstar)
  * restart Mesos slave upon config changes
 
- * [full changes](https://github.com/deric/puppet-dcos/compare/v0.4.0...v0.4.1)
+ * [full changes](https://github.com/deric/puppet-dcos/compare/v0.4.0...v0.4.2)
 
 ## [2017-12-21] Release 0.4.0
  * update `LD_LIBRARY_PATH` on Debian
