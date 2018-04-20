@@ -21,7 +21,7 @@ class dcos::agent (
     exec { 'dcos agent install':
       command     => "bash ${::dcos::download_dir}/dcos_install.sh ${role}",
       path        => '/bin:/usr/bin:/usr/sbin',
-      onlyif      => 'test -z `ls -A /opt/mesosphere`',
+      onlyif      => 'test -z "`ls -A /opt/mesosphere`"',
       refreshonly => false,
       before      => Anchor['dcos::agent::installed'],
     }
