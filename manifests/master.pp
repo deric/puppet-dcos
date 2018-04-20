@@ -13,7 +13,7 @@ class dcos::master (
     exec { 'dcos master install':
       command     => "bash ${::dcos::download_dir}/dcos_install.sh master",
       path        => '/bin:/usr/bin:/usr/sbin',
-      onlyif      => 'test ! -d /opt/mesosphere',
+      onlyif      => 'test -z `ls -A /opt/mesosphere`',
       refreshonly => false,
       before      => Anchor['dcos::master::installed'],
     }
