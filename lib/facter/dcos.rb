@@ -25,10 +25,10 @@ end
 
 Facter.add(:dcos_adminrouter_path) do
   setcode do
-    adminrouter_service = '/etc/systemd/system/dcos-adminrouter.service'
-    if File.exists?(adminrouter_service)
-      service_path = Facter::Util::Resolution.exec("dirname $(readlink -f #{adminrouter_service})")
-      File.expand_path('..', service_path)
+    dcos_env = '/opt/mesosphere/environment'
+    if File.exists?(dcos_env)
+      package_path = Facter::Util::Resolution.exec("cat /opt/mesosphere/environment | grep adminrouter | awk '{ print $3 }'")
+      "/opt/mesosphere/packages/#{package_path}"
     end
   end
 end
