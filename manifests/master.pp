@@ -56,6 +56,13 @@ class dcos::master (
     }
   }
 
+  service { 'dcos-metrics-master':
+    ensure     => 'running',
+    hasstatus  => true,
+    hasrestart => true,
+    enable     => true,
+  }
+
   service { $service_name:
     ensure     => 'running',
     hasstatus  => true,
