@@ -6,8 +6,8 @@ class dcos::master (
   $service_name = 'dcos-mesos-master',
   $adminrouter = {},
   $metrics = {},
-  $region = undef,
-  $zone = undef,
+  $region = $::dcos::region,
+  $zone = $::dcos::zone,
 ) inherits ::dcos {
 
   anchor { 'dcos::master::installed': }
