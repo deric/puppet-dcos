@@ -52,6 +52,7 @@ class dcos::master (
     file {'/opt/mesosphere/etc/dcos-metrics-config.yaml':
       ensure  => 'present',
       content => template('dcos/dcos-metrics-config.erb'),
+      notify  => Service['dcos-metrics-master'],
     }
   }
 
