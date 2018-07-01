@@ -198,7 +198,6 @@ describe 'dcos::agent' do
 
   end
 
-
   context 'domain' do
     let :pre_condition do
       'class {"dcos::agent":

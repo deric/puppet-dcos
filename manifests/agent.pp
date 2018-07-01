@@ -5,8 +5,8 @@ class dcos::agent (
   $attributes = {},
   $mesos = {},
   $executor = $::dcos::params::executor,
-  $zone = undef,
   $region = undef,
+  $zone = undef,
 ) inherits ::dcos {
 
   anchor { 'dcos::agent::installed': }

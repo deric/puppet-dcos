@@ -1,3 +1,6 @@
 <% @mesos.sort.each do |key, val| -%>
 <%= key.upcase -%>=<%= val %>
 <% end -%>
+<% if @region or @zone -%>
+MESOS_DOMAIN="/var/lib/dcos/mesos-master-domain.json"
+<% end -%>

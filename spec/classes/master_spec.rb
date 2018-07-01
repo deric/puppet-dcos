@@ -267,4 +267,28 @@ describe 'dcos::master' do
     end
   end
 
+  context 'domain' do
+    let(:facts) do
+      {
+        :operatingsystem => 'Debian',
+        :osfamily => 'Debian',
+        :lsbdistcodename => 'stretch',
+        :lsbdistid => 'Debian',
+        :puppetversion => Puppet.version,
+        :dcos_config_path => '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda/etc_master',
+      }
+    end
+    let :pre_condition do
+      'class {"dcos::master":
+         region => "us-east",
+       }'
+    end
+
+    it do
+      is_expected.to contain_file(
+        '/var/lib/dcos/mesos-master-domain.json'
+      ).with_content(/"name":"us-east"/)
+    end
+  end
+
 end

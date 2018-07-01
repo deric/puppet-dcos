@@ -5,7 +5,9 @@ class dcos::master (
   $manage_adminrouter = false,
   $service_name = 'dcos-mesos-master',
   $adminrouter = {},
-  $metrics = {}
+  $metrics = {},
+  $region = undef,
+  $zone = undef,
 ) inherits ::dcos {
 
   anchor { 'dcos::master::installed': }
@@ -46,6 +48,15 @@ class dcos::master (
     ensure  => 'present',
     content => template('dcos/master-extras.erb'),
     notify  => Service[$service_name],
+  }
+
+  if $region or $zone {
+    file {'/var/lib/dcos/mesos-master-domain.json':
+      ensure  => 'present',
+      content => dcos_domain($region, $zone),
+      notify  => Service[$service_name],
+      require => Anchor['dcos::master::installed'],
+    }
   }
 
   $config_dir = $::dcos_config_path
