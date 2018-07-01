@@ -48,8 +48,10 @@ class dcos::master (
     notify  => Service[$service_name],
   }
 
+  $config_dir = $::dcos_config_path
+
   if !empty($metrics) {
-    file {'/opt/mesosphere/etc/dcos-metrics-config.yaml':
+    file {"${config_dir}/../etc/dcos-metrics-config.yaml":
       ensure  => 'present',
       content => template('dcos/dcos-metrics-config.erb'),
       notify  => Service['dcos-metrics-master'],

@@ -7,6 +7,7 @@ describe 'dcos::master' do
       :operatingsystem => 'RedHat',
       :osfamily => 'RedHat',
       :puppetversion => Puppet.version,
+      :dcos_config_path => '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master',
     }
   end
 
@@ -37,6 +38,7 @@ describe 'dcos::master' do
         :lsbdistcodename => 'stretch',
         :lsbdistid => 'Debian',
         :puppetversion => Puppet.version,
+        :dcos_config_path => '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master',
       }
     end
 
@@ -236,6 +238,16 @@ describe 'dcos::master' do
   end
 
   context 'metrics config' do
+    let(:facts) do
+      {
+        :operatingsystem => 'Debian',
+        :osfamily => 'Debian',
+        :lsbdistcodename => 'stretch',
+        :lsbdistid => 'Debian',
+        :puppetversion => Puppet.version,
+        :dcos_config_path => '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda/etc_master',
+      }
+    end
     let :pre_condition do
       'class {"dcos::master":
          metrics => {
@@ -250,7 +262,7 @@ describe 'dcos::master' do
 
     it do
       is_expected.to contain_file(
-        '/opt/mesosphere/etc/dcos-metrics-config.yaml'
+        '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda/etc_master/../etc/dcos-metrics-config.yaml'
       ).with_content(/port: 61091/)
     end
   end
