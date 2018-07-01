@@ -235,4 +235,24 @@ describe 'dcos::master' do
 
   end
 
+  context 'metrics config' do
+    let :pre_condition do
+      'class {"dcos::master":
+         metrics => {
+           "producers" => {
+              "prometheus" => {
+                "port" => 61091
+              }
+           }
+         }
+       }'
+    end
+
+    it do
+      is_expected.to contain_file(
+        '/opt/mesosphere/etc/dcos-metrics-config.yaml'
+      ).with_content(/port: 61091/)
+    end
+  end
+
 end

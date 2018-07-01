@@ -4,7 +4,8 @@ class dcos::master (
   $mesos = {},
   $manage_adminrouter = false,
   $service_name = 'dcos-mesos-master',
-  $adminrouter = {}
+  $adminrouter = {},
+  $metrics = {}
 ) inherits ::dcos {
 
   anchor { 'dcos::master::installed': }
@@ -45,6 +46,13 @@ class dcos::master (
     ensure  => 'present',
     content => template('dcos/master-extras.erb'),
     notify  => Service[$service_name],
+  }
+
+  if !empty($metrics) {
+    file {'/opt/mesosphere/etc/dcos-metrics-config.yaml':
+      ensure  => 'present',
+      content => template('dcos/dcos-metrics-config.erb'),
+    }
   }
 
   service { $service_name:
