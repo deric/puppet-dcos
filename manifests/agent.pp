@@ -5,6 +5,8 @@ class dcos::agent (
   $attributes = {},
   $mesos = {},
   $executor = $::dcos::params::executor,
+  $zone = undef,
+  $region = undef,
 ) inherits ::dcos {
 
   anchor { 'dcos::agent::installed': }
@@ -65,6 +67,15 @@ class dcos::agent (
     content => template('dcos/agent-common.erb'),
     notify  => Service[$dcos_mesos_service],
     require => File['/var/lib/dcos'],
+  }
+
+  if $region or $zone {
+    file {'/var/lib/dcos/mesos-agent-domain.json':
+      ensure  => 'present',
+      content => dcos_domain($region, $zone),
+      notify  => Service[$dcos_mesos_service],
+      require => File['/var/lib/dcos'],
+    }
   }
 
   exec {'stop-dcos-agent':

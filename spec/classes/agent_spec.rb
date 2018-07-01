@@ -198,4 +198,19 @@ describe 'dcos::agent' do
 
   end
 
+
+  context 'domain' do
+    let :pre_condition do
+      'class {"dcos::agent":
+         region => "us-east",
+       }'
+    end
+
+    it do
+      is_expected.to contain_file(
+        '/var/lib/dcos/mesos-agent-domain.json'
+      ).with_content(/"name":"us-east"/)
+    end
+  end
+
 end
