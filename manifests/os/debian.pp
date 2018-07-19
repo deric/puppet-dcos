@@ -6,7 +6,7 @@ class dcos::os::debian {
   ensure_packages(['libcurl3-nss','ipset','selinux-utils','curl','unzip','bc','tar','ipvsadm','xz-utils'])
 
   # libraries dynamically linked to mesos:
-  ensure_packages(['libsvn1','libapr1'])
+  ensure_packages(['libsvn1','libapr1','libunwind8'])
 
   # systemd services have hardcoded paths, we need to ensure
   # the same paths as on RedHat systems
