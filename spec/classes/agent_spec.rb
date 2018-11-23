@@ -157,7 +157,7 @@ describe 'dcos::agent' do
     it do
       is_expected.to contain_file(
         '/var/lib/dcos/mesos-slave-common'
-      ).with_content(/MESOS_ATTRIBUTES=dc:us-east;instance:large;/)
+      ).with_content(/MESOS_ATTRIBUTES="dc:us-east;instance:large;"/)
     end
   end
 
