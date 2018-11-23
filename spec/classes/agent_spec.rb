@@ -230,8 +230,9 @@ describe 'dcos::agent' do
     it do
       is_expected.to contain_file(
         '/var/lib/dcos/mesos-slave-common'
-      ).with_content(/MESOS_RESOURCES=\"/)
-      # [{\"type\":\"SCALAR\",\"scalar\":{\"value\":6.0},\"name\":\"cpus\"}]\"
+      ).with_content(
+        /MESOS_RESOURCES=\"\[\{\\\"type\\\":\\\"SCALAR\\\",\\\"scalar\\\":\{\\\"value\\\":6.0\},\\\"name\\\":\\\"cpus\\\"\}\]\"/
+      )
     end
   end
 
