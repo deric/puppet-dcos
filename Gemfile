@@ -2,7 +2,8 @@ source "https://rubygems.org"
 
 group :test do
   gem "rake"
-  gem "puppet", ENV['PUPPET_GEM_VERSION'] || '~> 4.8.0'
+  # ruby 2.4 requires at least puppt 4.10.2 (ssl bug PUP-7383)
+  gem "puppet", ENV['PUPPET_GEM_VERSION'] || '~> 4.10'
   gem "rspec"
   gem "rspec-puppet"
   gem "puppetlabs_spec_helper"
