@@ -29,8 +29,8 @@ module Puppet::Parser::Functions
   newfunction(:dcos_sorted_json, :type => :rvalue, :doc => <<-EOS
 This function takes data, outputs making sure the hash keys are sorted
 *Examples:*
-    sorted_json({'key'=>'value'})
-Would return: {'key':'value'}
+    sorted_json({"foo"=>"value","bar"=>"value"})
+Would return: {"bar"=>"value","foo"=>"value"}
     EOS
   ) do |arguments|
 

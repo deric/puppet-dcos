@@ -212,4 +212,27 @@ describe 'dcos::agent' do
     end
   end
 
+
+  context 'resources' do
+    let :pre_condition do
+      'class {"dcos::agent":
+         resources => {
+           "cpus" => {
+              "type" => "SCALAR",
+              "scalar" => {
+                "value" => 6.0
+              }
+           }
+         }
+       }'
+    end
+
+    it do
+      is_expected.to contain_file(
+        '/var/lib/dcos/mesos-slave-common'
+      ).with_content(/MESOS_RESOURCES=\"/)
+      # [{\"type\":\"SCALAR\",\"scalar\":{\"value\":6.0},\"name\":\"cpus\"}]\"
+    end
+  end
+
 end

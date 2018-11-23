@@ -4,6 +4,7 @@ class dcos::agent (
   $public = false,
   $attributes = {},
   $mesos = {},
+  $resources = {},
   $executor = $::dcos::params::executor,
   $region = $::dcos::region,
   $zone = $::dcos::zone,

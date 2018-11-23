@@ -2,6 +2,9 @@ MESOS_ATTRIBUTES=<% @attributes.sort.each do |key, val| -%><%= key -%>:<%= val -
 <% @mesos.sort.each do |key, val| -%>
 <%= key.upcase -%>=<%= val %>
 <% end -%>
+<% unless @resources.empty? -%>
+MESOS_RESOURCES="<%= scope.function_dcos_resources([@resources]).to_s %>"
+<% end -%>
 <% if @region or @zone -%>
 MESOS_DOMAIN="/var/lib/dcos/mesos-agent-domain.json"
 <% end -%>

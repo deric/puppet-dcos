@@ -6,7 +6,7 @@ Generates configuration for Mesos domains
     EOS
   ) do |arguments|
 
-    raise(Puppet::ParseError, "sorted_json(): Wrong number of arguments " +
+    raise(Puppet::ParseError, "dcos_domain(): Wrong number of arguments " +
       "given (#{arguments.size} for 2)") if arguments.size != 2
 
     region = arguments[0]

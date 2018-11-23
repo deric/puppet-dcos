@@ -104,6 +104,32 @@ dcos::agent::attributes:
   hostname: "%{::fqdn}"
 ```
 
+## Mesos Resources
+
+Resources offered by Mesos could be limited using [`MESOS_RESOURCES` ENV variable](https://mesos.readthedocs.io/en/latest/attributes-resources/).
+
+Resources attribute:
+```yaml
+dcos::agent::resources:
+  cpus:
+    type: SCALAR
+    scalar:
+      value: 7.0
+```
+will be converted to JSON string that will be passed to `mesos-agent`
+```json
+[
+  {
+    "name": "cpus",
+    "type": "SCALAR",
+    "scalar": {
+      "value": 7.0
+    }
+  }
+]
+```
+NOTE: DC/OS merges `MESOS_RESOURCES` with allocated disk resources.
+
 ## YAML (Hiera/lookup) configuration
 
 Simply use supported parameters:
