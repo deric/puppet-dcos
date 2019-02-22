@@ -37,7 +37,7 @@ class dcos::adminrouter (
     exec { 'master_conf_doesnt_exist':
       command => "true",
       path    =>  ["/usr/bin","/usr/sbin", "/bin"],
-      onlyif  => "! test -f ${adminrouter_path}/nginx/conf/includes/main/master.conf"
+      unless  => "test -f ${adminrouter_path}/nginx/conf/includes/main/master.conf"
     }
 
     file {"${adminrouter_path}/nginx/conf/nginx.master.conf":
