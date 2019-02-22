@@ -28,10 +28,30 @@ class dcos::adminrouter (
       notify  => Service['dcos-adminrouter'],
     }
 
+    exec { "master_conf_exist":
+      command => "true",
+      path    =>  ["/usr/bin","/usr/sbin", "/bin"],
+      onlyif  => "test -f ${adminrouter_path}/nginx/conf/includes/main/master.conf"
+    }
+
+    exec { 'master_conf_doesnt_exist':
+      command => "true",
+      path    =>  ["/usr/bin","/usr/sbin", "/bin"],
+      onlyif  => "! test -f ${adminrouter_path}/nginx/conf/includes/main/master.conf"
+    }
+
     file {"${adminrouter_path}/nginx/conf/nginx.master.conf":
       ensure  => 'present',
       content => template('dcos/nginx.master.conf.erb'),
       notify  => Service['dcos-adminrouter'],
+      require => Exec['master_conf_doesnt_exist'],
+    }
+
+    file {"${adminrouter_path}/nginx/conf/nginx.master.conf.dedup":
+      ensure  => 'present',
+      content => template('dcos/nginx.master.conf.erb'),
+      notify  => Service['dcos-adminrouter'],
+      require => Exec['master_conf_exist'],
     }
 
     file {"${config_dir}/../etc/adminrouter.env":
