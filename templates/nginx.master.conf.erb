@@ -1,4 +1,7 @@
 include includes/main/common.conf;
+<% if @include_master_conf -%>
+include includes/main/master.conf;
+<% end -%>
 include includes/main/open/common.conf;
 
 http {

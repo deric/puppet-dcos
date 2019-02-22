@@ -140,6 +140,7 @@ describe 'dcos::master' do
         :puppetversion => Puppet.version,
         :dcos_config_path => '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master',
         :dcos_adminrouter_path => '/opt/mesosphere/packages/adminrouter--e0de512c046bee17e0d458d10e7c8c2b24f56fc6',
+        :dcos_include_master_conf => false,
       }
     end
     let :pre_condition do

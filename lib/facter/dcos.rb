@@ -32,3 +32,10 @@ Facter.add(:dcos_adminrouter_path) do
     end
   end
 end
+
+Facter.add(:dcos_include_master_conf) do
+  setcode do
+    master_conf = "#{Facter.value(:dcos_adminrouter_path)}/nginx/conf/includes/main/master.conf"
+    File.exists?(master_conf)
+  end
+end
