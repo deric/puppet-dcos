@@ -33,7 +33,6 @@ class dcos::adminrouter (
       ensure  => 'present',
       content => template('dcos/nginx.master.conf.erb'),
       notify  => Service['dcos-adminrouter'],
-      require => Exec['master_conf_doesnt_exist'],
     }
 
     file {"${config_dir}/../etc/adminrouter.env":
