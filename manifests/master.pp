@@ -61,15 +61,15 @@ class dcos::master (
 
   $config_dir = $::dcos_config_path
 
-  if !empty($metrics) {
-    file {"${config_dir}/../etc/dcos-metrics-config.yaml":
-      ensure  => 'present',
-      content => template('dcos/dcos-metrics-config.erb'),
-      notify  => Service['dcos-metrics-master'],
-    }
-  }
-
   if versioncmp($::dcos_version, '1.13.0') < 0 {
+    if !empty($metrics) {
+      file {"${config_dir}/../etc/dcos-metrics-config.yaml":
+        ensure  => 'present',
+        content => template('dcos/dcos-metrics-config.erb'),
+        notify  => Service['dcos-metrics-master'],
+      }
+    }
+
     service { 'dcos-metrics-master':
       ensure     => 'running',
       hasstatus  => true,
