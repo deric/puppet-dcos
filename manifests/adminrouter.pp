@@ -34,22 +34,15 @@ class dcos::adminrouter (
       notify  => Service['dcos-adminrouter'],
     }
 
-    $ver = split($::dcos_version, '.')
-    $maj_version = join([$ver[0], $ver[1]], '.')
-
-    case $maj_version {
-      '1.13': {
-        File<| title == "${adminrouter_path}/nginx/conf/nginx.master.conf" |> {
-          content => template('dcos/nginx.master.conf-1.13.erb'),
-        }
+    if versioncmp($::dcos_version, '1.13.0') >= 0 {
+      File<| title == "${adminrouter_path}/nginx/conf/nginx.master.conf" |> {
+        content => template('dcos/nginx.master.conf-1.13.erb'),
       }
-      default: {
-        File<| title == "${adminrouter_path}/nginx/conf/nginx.master.conf" |> {
-          content => template('dcos/nginx.master.conf.erb'),
-        }
+    } else {
+      File<| title == "${adminrouter_path}/nginx/conf/nginx.master.conf" |> {
+        content => template('dcos/nginx.master.conf.erb'),
       }
     }
-
 
     file {"${config_dir}/../etc/adminrouter.env":
       ensure  => 'present',

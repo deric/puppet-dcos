@@ -8,6 +8,7 @@ describe 'dcos::master' do
       :osfamily => 'RedHat',
       :puppetversion => Puppet.version,
       :dcos_config_path => '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master',
+      :dcos_version => '1.12.4',
     }
   end
 
@@ -39,6 +40,7 @@ describe 'dcos::master' do
         :lsbdistid => 'Debian',
         :puppetversion => Puppet.version,
         :dcos_config_path => '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master',
+        :dcos_version => '1.12.4',
       }
     end
 
@@ -49,7 +51,8 @@ describe 'dcos::master' do
     it { is_expected.to contain_class('dcos::config') }
     it { is_expected.to contain_class('dcos::os::debian') }
 
-    it { is_expected.to contain_service('dcos-mesos-master') }
+    it { is_expected.to contain_service('dcos-mesos-master').with_ensure('running') }
+    it { is_expected.to contain_service('dcos-metrics-master').with_ensure('running') }
 
     context 'installed pre-requisities' do
       it { is_expected.to contain_package('ipset').with_ensure('present') }
@@ -112,6 +115,22 @@ describe 'dcos::master' do
       end
     end
 
+  end
+
+  context 'dc/os 1.13' do
+    let(:facts) do
+      {
+        :operatingsystem => 'Debian',
+        :osfamily => 'Debian',
+        :lsbdistcodename => 'stretch',
+        :lsbdistid => 'Debian',
+        :puppetversion => Puppet.version,
+        :dcos_config_path => '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda2a9d6b9426d63401297492434bfa46/etc_master',
+        :dcos_version => '1.13.2',
+      }
+    end
+
+    it { is_expected.not_to contain_service('dcos-metrics-master').with_ensure('running') }
   end
 
   context 'CFS' do
@@ -282,6 +301,7 @@ describe 'dcos::master' do
         :lsbdistid => 'Debian',
         :puppetversion => Puppet.version,
         :dcos_config_path => '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda/etc_master',
+        :dcos_version => '1.11.9',
       }
     end
     let :pre_condition do
@@ -312,6 +332,7 @@ describe 'dcos::master' do
         :lsbdistid => 'Debian',
         :puppetversion => Puppet.version,
         :dcos_config_path => '/opt/mesosphere/packages/dcos-config--setup_8ec0bf2dda/etc_master',
+        :dcos_version => '1.11.9',
       }
     end
     let :pre_condition do

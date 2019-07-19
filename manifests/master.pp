@@ -69,11 +69,13 @@ class dcos::master (
     }
   }
 
-  service { 'dcos-metrics-master':
-    ensure     => 'running',
-    hasstatus  => true,
-    hasrestart => true,
-    enable     => true,
+  if versioncmp($::dcos_version, '1.13.0') < 0 {
+    service { 'dcos-metrics-master':
+      ensure     => 'running',
+      hasstatus  => true,
+      hasrestart => true,
+      enable     => true,
+    }
   }
 
   service { $service_name:
