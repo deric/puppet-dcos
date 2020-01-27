@@ -61,7 +61,8 @@ class dcos::master (
 
   $config_dir = $::dcos_config_path
 
-  if versioncmp($::dcos_version, '1.13.0') < 0 {
+  # make sure fact is defined
+  if $::dcos_version and versioncmp($::dcos_version, '1.13.0') < 0 {
     if !empty($metrics) {
       file {"${config_dir}/../etc/dcos-metrics-config.yaml":
         ensure  => 'present',
