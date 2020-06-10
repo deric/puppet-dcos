@@ -11,37 +11,44 @@ class dcos::os::debian {
   # systemd services have hardcoded paths, we need to ensure
   # the same paths as on RedHat systems
   file { '/usr/bin/bash':
-    ensure => link,
-    target => '/bin/bash',
+    ensure  => link,
+    target  => '/bin/bash',
+    replace => false,
   }
 
   file { '/usr/bin/rm':
-    ensure => link,
-    target => '/bin/rm',
+    ensure  => link,
+    target  => '/bin/rm',
+    replace => false,
   }
 
   file { '/usr/bin/tar':
-    ensure => link,
-    target => '/bin/tar',
+    ensure  => link,
+    target  => '/bin/tar',
+    replace => false,
   }
 
   file { '/usr/bin/mkdir':
-    ensure => link,
-    target => '/bin/mkdir',
+    ensure  => link,
+    target  => '/bin/mkdir',
+    replace => false,
   }
 
   file { '/usr/bin/ln':
-    ensure => link,
-    target => '/bin/ln',
+    ensure  => link,
+    target  => '/bin/ln',
+    replace => false,
   }
 
   file { '/sbin/useradd':
-    ensure => link,
-    target => '/usr/sbin/useradd',
+    ensure  => link,
+    target  => '/usr/sbin/useradd',
+    replace => false,
   }
 
   file { '/usr/sbin/ipset':
-    ensure => link,
-    target => '/sbin/ipset',
+    ensure  => link,
+    target  => '/sbin/ipset',
+    replace => false,
   }
 }
