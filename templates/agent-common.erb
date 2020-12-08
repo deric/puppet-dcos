@@ -8,6 +8,3 @@ MESOS_RESOURCES="<%= scope.function_dcos_resources([@resources]).gsub('"', '\"')
 <% if @region or @zone -%>
 MESOS_DOMAIN="/var/lib/dcos/mesos-agent-domain.json"
 <% end -%>
-<% if @hostname -%>
-MESOS_HOSTNAME="<%= @hostname %>"
-<% end -%>
