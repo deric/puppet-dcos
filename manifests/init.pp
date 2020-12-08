@@ -34,12 +34,12 @@ class dcos (
   $install_checksum = $::dcos::params::install_checksum,
   $region           = undef,
   $zone             = undef
-) inherits ::dcos::params {
+) inherits dcos::params {
 
-  include ::dcos::install
-  include ::dcos::config
+  include dcos::install
+  include dcos::config
 
-  Class['::dcos::install']
-  -> Class['::dcos::config']
-  -> Class['::dcos']
+  Class['dcos::install']
+  -> Class['dcos::config']
+  -> Class['dcos']
 }

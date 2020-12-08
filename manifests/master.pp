@@ -8,11 +8,11 @@ class dcos::master (
   $metrics = {},
   $region = $::dcos::region,
   $zone = $::dcos::zone,
-) inherits ::dcos {
+) inherits dcos {
 
   anchor { 'dcos::master::installed': }
 
-  if $::dcos::bootstrap_url {
+  if $dcos::bootstrap_url {
     exec { 'dcos master install':
       command     => "bash ${::dcos::download_dir}/dcos_install.sh master",
       path        => '/bin:/usr/bin:/usr/sbin',
@@ -38,7 +38,7 @@ class dcos::master (
   }
 
   if $manage_adminrouter {
-    class{'::dcos::adminrouter':
+    class{'dcos::adminrouter':
       config  => $adminrouter,
       require => Anchor['dcos::master::installed'],
     }

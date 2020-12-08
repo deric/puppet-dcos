@@ -30,8 +30,8 @@ class dcos::adminrouter (
     }
 
     file {"${adminrouter_path}/nginx/conf/nginx.master.conf":
-      ensure  => 'present',
-      notify  => Service['dcos-adminrouter'],
+      ensure => 'present',
+      notify => Service['dcos-adminrouter'],
     }
 
     if versioncmp($::dcos_version, '1.13.0') >= 0 {

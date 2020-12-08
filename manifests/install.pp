@@ -17,13 +17,13 @@ class dcos::install {
   # prerequisities
   case $::osfamily {
     'Debian': {
-      include ::dcos::os::debian
-      Class['::dcos::os::debian']
+      include dcos::os::debian
+      Class['dcos::os::debian']
       -> Anchor['dcos::install::begin']
     }
     'RedHat', 'Amazon': {
-      include ::dcos::os::redhat
-      Class['::dcos::os::redhat']
+      include dcos::os::redhat
+      Class['dcos::os::redhat']
       -> Anchor['dcos::install::begin']
     }
     default: {
@@ -32,9 +32,9 @@ class dcos::install {
   }
 
   if $::dcos::bootstrap_url {
-    $download_url = "${::dcos::bootstrap_url}/${::dcos::bootstrap_script}"
+    $download_url = "${dcos::bootstrap_url}/${::dcos::bootstrap_script}"
 
-    archive { "${::dcos::download_dir}/dcos_install.sh":
+    archive { "${dcos::download_dir}/dcos_install.sh":
       ensure        => present,
       user          => 'root',
       group         => 'root',
@@ -47,7 +47,7 @@ class dcos::install {
       require       => Anchor['dcos::install::begin'],
     }
 
-    Archive["${::dcos::download_dir}/dcos_install.sh"]
+    Archive["${dcos::download_dir}/dcos_install.sh"]
     -> Anchor['dcos::install::end']
 
   }
