@@ -1,3 +1,13 @@
+## [2020-12-08] Release 0.5.0
+
+ * Don't replace existing files/symlinks on Debian (buster support)
+ * adminrouterr config for 1.13
+ * use ensure file in order to make sure that content is applied
+ * allow common configuration for both master and agent
+
+ * [full changes](https://github.com/deric/puppet-dcos/compare/v0.4.3...v0.5.0)
+
+
 ## [2018-08-20] Release 0.4.3
  * install DC/OS only into a non-empty directory (#1)
 

@@ -1,6 +1,6 @@
 {
   "name": "deric-dcos",
-  "version": "0.4.4",
+  "version": "0.5.0",
   "author": "deric",
   "summary": "Manage DC/OS nodes",
   "license": "Apache-2.0",
