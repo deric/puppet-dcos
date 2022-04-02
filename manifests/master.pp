@@ -53,7 +53,7 @@ class dcos::master (
   if $region or $zone {
     file {'/var/lib/dcos/mesos-master-domain.json':
       ensure  => 'present',
-      content => dcos_domain($region, $zone),
+      content => dcos::domain($region, $zone),
       notify  => Service[$service_name],
       require => Anchor['dcos::master::installed'],
     }

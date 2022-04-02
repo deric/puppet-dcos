@@ -13,15 +13,16 @@ Puppet::Functions.create_function(:'dcos::resources') do
   #   Describe what the function returns here
   #
   dispatch :default_impl do
-    required_param 'Hash', :resources
+    required_param 'Any', :resources
   end
 
 
   def default_impl(resources)
     mesos_res = []
     resources.each do |k, v|
-      v["name"] = k
-      mesos_res << v
+      value = v.dup
+      value['name'] = k
+      mesos_res << value
     end
 
     return mesos_res.to_json

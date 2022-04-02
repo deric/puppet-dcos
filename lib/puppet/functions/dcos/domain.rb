@@ -14,11 +14,11 @@ Puppet::Functions.create_function(:'dcos::domain') do
   #
   dispatch :default_impl do
     required_param 'String', :region
-    required_param 'String', :zone
+    optional_param 'Optional[String]', :zone
   end
 
 
-  def default_impl(region, zone)
+  def default_impl(region, zone=nil)
     conf = {"fault_domain" => {}}
 
     if region
