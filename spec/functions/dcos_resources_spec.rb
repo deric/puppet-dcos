@@ -5,7 +5,7 @@ require 'spec_helper'
 require 'rspec-puppet'
 require 'json'
 
-describe 'dcos_resources' do
+describe 'dcos::resources' do
   describe 'basic usage ' do
     it 'should raise an error if run with extra arguments' do
       is_expected.to run.with_params(1, 2).and_raise_error(Puppet::ParseError)

@@ -16,7 +16,7 @@ require 'json'
 #Would return: {"bar"=>"value","foo"=>"value"}
 #
 #
-Puppet::Functions.create_function(:'dcos::dcos_sorted_json') do
+Puppet::Functions.create_function(:'dcos::sorted_json') do
   # @param arguments
   #   The original array of arguments. Port this to individually managed params
   #   to get the full benefit of the modern function API.

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'dcos::dcos_sorted_json' do
+describe 'dcos::sorted_json' do
   # without knowing details about the implementation, this is the only test
   # case that we can autogenerate. You should add more examples below!
   it { is_expected.not_to eq(nil) }

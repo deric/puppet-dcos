@@ -4,7 +4,7 @@
 require 'spec_helper'
 require 'rspec-puppet'
 
-describe 'dcos_domain' do
+describe 'dcos::domain' do
   describe 'basic usage ' do
     it 'should raise an error if run with extra arguments' do
       is_expected.to run.with_params(1, 2, 3, 4).and_raise_error(Puppet::ParseError)

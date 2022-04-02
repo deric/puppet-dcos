@@ -49,7 +49,7 @@ class dcos::agent (
 
   file {"${config_dir}/../etc/mesos-executor-environment.json":
     ensure  => 'file',
-    content => dcos_sorted_json($executor),
+    content => dcos::sorted_json($executor),
     notify  => Service[$dcos_mesos_service],
     require => Anchor['dcos::agent::installed'],
   }
@@ -73,7 +73,7 @@ class dcos::agent (
   if $region or $zone {
     file {'/var/lib/dcos/mesos-agent-domain.json':
       ensure  => 'file',
-      content => dcos_domain($region, $zone),
+      content => dcos::domain($region, $zone),
       notify  => Service[$dcos_mesos_service],
       require => File['/var/lib/dcos'],
     }

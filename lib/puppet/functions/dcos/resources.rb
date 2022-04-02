@@ -4,7 +4,7 @@ require 'json'
 #   Convert resources hash to a JSON format accepted by Mesos
 #
 #
-Puppet::Functions.create_function(:'dcos::dcos_resources') do
+Puppet::Functions.create_function(:'dcos::resources') do
   # @param arguments
   #   The original array of arguments. Port this to individually managed params
   #   to get the full benefit of the modern function API.
@@ -25,6 +25,5 @@ Puppet::Functions.create_function(:'dcos::dcos_resources') do
     end
 
     return mesos_res.to_json
-  
   end
 end

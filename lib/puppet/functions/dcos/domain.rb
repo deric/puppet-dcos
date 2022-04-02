@@ -4,7 +4,7 @@ require 'json'
 #   Generates configuration for Mesos domains
 #
 #
-Puppet::Functions.create_function(:'dcos::dcos_domain') do
+Puppet::Functions.create_function(:'dcos::domain') do
   # @param arguments
   #   The original array of arguments. Port this to individually managed params
   #   to get the full benefit of the modern function API.
@@ -29,6 +29,5 @@ Puppet::Functions.create_function(:'dcos::dcos_domain') do
       conf["fault_domain"]["zone"] = {"name" => zone}
     end
     return conf.to_json
-  
   end
 end
