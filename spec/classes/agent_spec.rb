@@ -22,11 +22,11 @@ describe 'dcos::agent' do
     it { is_expected.to contain_service('dcos-mesos-slave') }
 
     context 'installed pre-requisities' do
-      it { is_expected.to contain_package('tar').with_ensure('present') }
-      it { is_expected.to contain_package('ipset').with_ensure('present') }
-      it { is_expected.to contain_package('curl').with_ensure('present') }
-      it { is_expected.to contain_package('xz').with_ensure('present') }
-      it { is_expected.to contain_package('unzip').with_ensure('present') }
+      it { is_expected.to contain_package('tar').with_ensure(/present|installed/) }
+      it { is_expected.to contain_package('ipset').with_ensure(/present|installed/) }
+      it { is_expected.to contain_package('curl').with_ensure(/present|installed/) }
+      it { is_expected.to contain_package('xz').with_ensure(/present|installed/) }
+      it { is_expected.to contain_package('unzip').with_ensure(/present|installed/) }
     end
   end
 
@@ -52,13 +52,13 @@ describe 'dcos::agent' do
     it { is_expected.to contain_service('dcos-mesos-slave') }
 
     context 'installed pre-requisities' do
-      it { is_expected.to contain_package('ipset').with_ensure('present') }
-      it { is_expected.to contain_package('curl').with_ensure('present') }
-      it { is_expected.to contain_package('bc').with_ensure('present') }
-      it { is_expected.to contain_package('selinux-utils').with_ensure('present') }
-      it { is_expected.to contain_package('unzip').with_ensure('present') }
-      it { is_expected.to contain_package('libcurl3-nss').with_ensure('present') }
-      it { is_expected.to contain_package('tar').with_ensure('present') }
+      it { is_expected.to contain_package('ipset').with_ensure(/present|installed/) }
+      it { is_expected.to contain_package('curl').with_ensure(/present|installed/) }
+      it { is_expected.to contain_package('bc').with_ensure(/present|installed/) }
+      it { is_expected.to contain_package('selinux-utils').with_ensure(/present|installed/) }
+      it { is_expected.to contain_package('unzip').with_ensure(/present|installed/) }
+      it { is_expected.to contain_package('libcurl3-nss').with_ensure(/present|installed/) }
+      it { is_expected.to contain_package('tar').with_ensure(/present|installed/) }
     end
 
     context 'symlinks created' do

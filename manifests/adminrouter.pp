@@ -8,7 +8,7 @@
 #    ssl_certificate_key: '/etc/letsencrypt/live/master.example.com/privkey.pem'
 #
 class dcos::adminrouter (
-  $config,
+  Hash $config,
 ) {
   $server_name = pick($config['server_name'], 'master.mesos')
   $ssl_certificate = pick($config['ssl_certificate'], 'includes/snakeoil.crt')

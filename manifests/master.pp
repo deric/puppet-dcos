@@ -1,13 +1,13 @@
 # DC/OS master node
 #
 class dcos::master (
-  $mesos = {},
-  $manage_adminrouter = false,
-  $service_name = 'dcos-mesos-master',
-  $adminrouter = {},
-  $metrics = {},
-  $region = $::dcos::region,
-  $zone = $::dcos::zone,
+  Hash             $mesos = {},
+  Boolean          $manage_adminrouter = false,
+  String           $service_name = 'dcos-mesos-master',
+  Hash             $adminrouter = {},
+  Hash             $metrics = {},
+  Optional[String] $region = $::dcos::region,
+  Optional[String] $zone = $::dcos::zone,
 ) inherits dcos {
 
   anchor { 'dcos::master::installed': }

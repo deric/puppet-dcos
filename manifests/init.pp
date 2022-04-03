@@ -28,12 +28,12 @@
 #   ```
 #
 class dcos (
-  $bootstrap_url    = undef,
-  $bootstrap_script = $::dcos::params::bootstrap_script,
-  $download_dir     = $::dcos::params::download_dir,
-  $install_checksum = $::dcos::params::install_checksum,
-  $region           = undef,
-  $zone             = undef
+  Optional[String] $bootstrap_url    = undef,
+  Optional[String] $bootstrap_script = $::dcos::params::bootstrap_script,
+  Optional[String] $download_dir     = $::dcos::params::download_dir,
+  Optional[Hash]   $install_checksum = $::dcos::params::install_checksum,
+  Optional[String] $region           = undef,
+  Optional[String] $zone             = undef
 ) inherits dcos::params {
 
   include dcos::install

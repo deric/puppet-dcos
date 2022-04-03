@@ -1,13 +1,13 @@
 # DC/OS agent node
 #
 class dcos::agent (
-  $public = false,
-  $attributes = {},
-  $mesos = {},
-  $resources = {},
-  $executor = $::dcos::params::executor,
-  $region = $::dcos::region,
-  $zone = $::dcos::zone,
+  Boolean          $public = false,
+  Hash             $attributes = {},
+  Hash             $mesos = {},
+  Hash             $resources = {},
+  Hash             $executor = $::dcos::params::executor,
+  Optional[String] $region = $::dcos::region,
+  Optional[String] $zone = $::dcos::zone,
 ) inherits dcos {
 
   anchor { 'dcos::agent::installed': }
