@@ -17,17 +17,16 @@ Puppet::Functions.create_function(:'dcos::domain') do
     optional_param 'Optional[String]', :zone
   end
 
-
-  def default_impl(region, zone=nil)
-    conf = {"fault_domain" => {}}
+  def default_impl(region, zone = nil)
+    conf = { 'fault_domain' => {} }
 
     if region
-      conf["fault_domain"]["region"] = {"name" => region}
+      conf['fault_domain']['region'] = { 'name' => region }
     end
 
     if zone
-      conf["fault_domain"]["zone"] = {"name" => zone}
+      conf['fault_domain']['zone'] = { 'name' => zone }
     end
-    return conf.to_json
+    conf.to_json
   end
 end

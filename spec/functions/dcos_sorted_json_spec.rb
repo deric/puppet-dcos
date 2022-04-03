@@ -6,9 +6,8 @@ describe 'dcos::sorted_json' do
   it { is_expected.not_to eq(nil) }
 
   it 'returns the proper output' do
-    json = {'foo'=> 'value', 'bar' => 'value'}
-    sorted = "{\"bar\":\"value\",\"foo\":\"value\"}"
+    json = { 'foo' => 'value', 'bar' => 'value' }
+    sorted = '{"bar":"value","foo":"value"}'
     is_expected.to run.with_params(json).and_return(sorted)
   end
-
 end

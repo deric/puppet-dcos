@@ -11,9 +11,9 @@ require 'json'
 #
 # @summary
 #   This function takes data, outputs making sure the hash keys are sorted
-#*Examples:*
+# *Examples:*
 #    sorted_json({"foo"=>"value","bar"=>"value"})
-#Would return: {"bar"=>"value","foo"=>"value"}
+# Would return: {"bar"=>"value","foo"=>"value"}
 #
 #
 Puppet::Functions.create_function(:'dcos::sorted_json') do
@@ -30,22 +30,22 @@ Puppet::Functions.create_function(:'dcos::sorted_json') do
 
   def sorted_generate(obj)
     case obj
-      when Array
-        arrayRet = []
-        obj.each do |a|
-          arrayRet.push(sorted_generate(a))
-        end
-        return "[" << arrayRet.join(',') << "]";
-      when Hash
-        ret = []
-        obj.keys.sort.each do |k|
-          ret.push(k.to_json << ":#{sorted_generate(obj[k])}")
-        end
-        return "{" << ret.join(",") << "}";
-      when String
-        return obj.to_json
-      else
-        return obj.to_json
+    when Array
+      arrayRet = []
+      obj.each do |a|
+        arrayRet.push(sorted_generate(a))
+      end
+      '[' << arrayRet.join(',') << ']'
+    when Hash
+      ret = []
+      obj.keys.sort.each do |k|
+        ret.push(k.to_json << ":#{sorted_generate(obj[k])}")
+      end
+      '{' << ret.join(',') << '}'
+    when String
+      obj.to_json
+    else
+      obj.to_json
     end
   end # end def
 
@@ -54,9 +54,6 @@ Puppet::Functions.create_function(:'dcos::sorted_json') do
   end
 
   def default_impl(json)
-    return sorted_json(json)
+    sorted_json(json)
   end
-
-
-
 end

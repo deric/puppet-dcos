@@ -16,7 +16,6 @@ Puppet::Functions.create_function(:'dcos::resources') do
     required_param 'Any', :resources
   end
 
-
   def default_impl(resources)
     mesos_res = []
     resources.each do |k, v|
@@ -25,6 +24,6 @@ Puppet::Functions.create_function(:'dcos::resources') do
       mesos_res << value
     end
 
-    return mesos_res.to_json
+    mesos_res.to_json
   end
 end
