@@ -3,6 +3,9 @@ require 'spec_helper'
 describe 'dcos::agent' do
   let(:facts) do
     {
+      os: {
+        family: 'RedHat'
+      },
       operatingsystem: 'RedHat',
       osfamily: 'RedHat',
       puppetversion: Puppet.version,
@@ -32,6 +35,9 @@ describe 'dcos::agent' do
   context 'on Debian based systems' do
     let(:facts) do
       {
+        os: {
+          family: 'Debian'
+        },
         operatingsystem: 'Debian',
         osfamily: 'Debian',
         lsbdistcodename: 'stretch',
@@ -230,5 +236,27 @@ describe 'dcos::agent' do
         %r{MESOS_RESOURCES=\"\[\{\\\"type\\\":\\\"SCALAR\\\",\\\"scalar\\\":\{\\\"value\\\":6.0\},\\\"name\\\":\\\"cpus\\\"\}\]\"},
       )
     end
+  end
+
+  context 'do not manage service' do
+    let(:params) do
+      {
+        manage_service: false,
+     public: false,
+      }
+    end
+
+    it { is_expected.not_to contain_service('dcos-mesos-slave') }
+  end
+
+  context 'do not manage service on public node' do
+    let(:params) do
+      {
+        manage_service: false,
+     public: true,
+      }
+    end
+
+    it { is_expected.not_to contain_service('dcos-mesos-slave-public') }
   end
 end
