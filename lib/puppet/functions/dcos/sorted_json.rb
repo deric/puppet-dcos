@@ -31,11 +31,11 @@ Puppet::Functions.create_function(:'dcos::sorted_json') do
   def sorted_generate(obj)
     case obj
     when Array
-      arrayRet = []
+      array_ret = []
       obj.each do |a|
-        arrayRet.push(sorted_generate(a))
+        array_ret.push(sorted_generate(a))
       end
-      '[' << arrayRet.join(',') << ']'
+      '[' << array_ret.join(',') << ']'
     when Hash
       ret = []
       obj.keys.sort.each do |k|
