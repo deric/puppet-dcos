@@ -3,6 +3,10 @@ require 'spec_helper'
 describe 'dcos::master' do
   let(:facts) do
     {
+      os: {
+        family: 'RedHat',
+        name: 'RedHat'
+      },
       operatingsystem: 'RedHat',
       osfamily: 'RedHat',
       puppetversion: Puppet.version,
@@ -34,6 +38,10 @@ describe 'dcos::master' do
     let(:facts) do
       {
         operatingsystem: 'Debian',
+        os: {
+          family: 'Debian',
+          name: 'Debian'
+        },
         osfamily: 'Debian',
         lsbdistcodename: 'stretch',
         lsbdistid: 'Debian',
@@ -118,6 +126,10 @@ describe 'dcos::master' do
   context 'dc/os 1.13' do
     let(:facts) do
       {
+        os: {
+          family: 'Debian',
+          name: 'Debian'
+        },
         operatingsystem: 'Debian',
         osfamily: 'Debian',
         lsbdistcodename: 'stretch',
@@ -150,6 +162,10 @@ describe 'dcos::master' do
   context 'adminrouter' do
     let(:facts) do
       {
+        os: {
+          family: 'Debian',
+          name: 'Debian'
+        },
         operatingsystem: 'Debian',
         osfamily: 'Debian',
         lsbdistcodename: 'stretch',
@@ -222,6 +238,10 @@ describe 'dcos::master' do
   context 'adminrouter 1.13' do
     let(:facts) do
       {
+        os: {
+          family: 'Debian',
+          name: 'Debian'
+        },
         operatingsystem: 'Debian',
         osfamily: 'Debian',
         lsbdistcodename: 'stretch',
@@ -273,7 +293,7 @@ describe 'dcos::master' do
     end
 
     it do
-      is_expected.to contain_anchor('dcos::install::begin')
+      is_expected.to contain_file('/tmp/dcos').with_ensure('directory')
     end
 
     it do
@@ -291,6 +311,10 @@ describe 'dcos::master' do
   context 'metrics config' do
     let(:facts) do
       {
+        os: {
+          family: 'Debian',
+          name: 'Debian'
+        },
         operatingsystem: 'Debian',
         osfamily: 'Debian',
         lsbdistcodename: 'stretch',
@@ -322,6 +346,10 @@ describe 'dcos::master' do
   context 'domain' do
     let(:facts) do
       {
+        os: {
+          family: 'Debian',
+          name: 'Debian'
+        },
         operatingsystem: 'Debian',
         osfamily: 'Debian',
         lsbdistcodename: 'stretch',

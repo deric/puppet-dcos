@@ -7,6 +7,10 @@ describe 'dcos' do
         {
           osfamily: 'Solaris',
           operatingsystem: 'Nexenta',
+          os: {
+            family: 'Solaris',
+            name: 'Nexenta',
+          }
         }
       end
 

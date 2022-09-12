@@ -186,7 +186,7 @@ describe 'dcos::agent' do
     end
 
     it do
-      is_expected.to contain_anchor('dcos::install::begin')
+      is_expected.to contain_file('/tmp/dcos').with_ensure('directory')
     end
 
     it do
