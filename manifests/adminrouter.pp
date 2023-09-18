@@ -14,7 +14,7 @@ class dcos::adminrouter (
   $ssl_certificate = pick($config['ssl_certificate'], 'includes/snakeoil.crt')
   $ssl_certificate_key = pick($config['ssl_certificate_key'], 'includes/snakeoil.key')
 
-  if has_key($config, 'default_scheme') {
+  if 'default_scheme' in $config {
     $default_scheme = $config['default_scheme']
   }
 
