@@ -7,6 +7,7 @@
 #    ssl_certificate: '/etc/letsencrypt/live/master.example.com/fullchain.pem'
 #    ssl_certificate_key: '/etc/letsencrypt/live/master.example.com/privkey.pem'
 #
+# @param config
 class dcos::adminrouter (
   Hash $config,
 ) {
@@ -18,23 +19,23 @@ class dcos::adminrouter (
     $default_scheme = $config['default_scheme']
   }
 
-  $config_dir = $::dcos_config_path
-  $adminrouter_path = $::dcos_adminrouter_path
-  $include_master_conf = $::dcos_include_master_conf
+  $config_dir = $facts['dcos_config_path']
+  $adminrouter_path = $facts['dcos_adminrouter_path']
+  $include_master_conf = $facts['dcos_include_master_conf']
 
   if $config_dir and $adminrouter_path {
-    file {"${config_dir}/adminrouter-listen-open.conf":
-      ensure  => 'present',
+    file { "${config_dir}/adminrouter-listen-open.conf":
+      ensure  => 'file',
       content => template('dcos/adminrouter-listen-open.conf.erb'),
       notify  => Service['dcos-adminrouter'],
     }
 
-    file {"${adminrouter_path}/nginx/conf/nginx.master.conf":
-      ensure => 'present',
+    file { "${adminrouter_path}/nginx/conf/nginx.master.conf":
+      ensure => 'file',
       notify => Service['dcos-adminrouter'],
     }
 
-    if versioncmp($::dcos_version, '1.13.0') >= 0 {
+    if versioncmp($facts['dcos_version'], '1.13.0') >= 0 {
       File<| title == "${adminrouter_path}/nginx/conf/nginx.master.conf" |> {
         content => template('dcos/nginx.master.conf-1.13.erb'),
       }
@@ -44,8 +45,8 @@ class dcos::adminrouter (
       }
     }
 
-    file {"${config_dir}/../etc/adminrouter.env":
-      ensure  => 'present',
+    file { "${config_dir}/../etc/adminrouter.env":
+      ensure  => 'file',
       content => template('dcos/adminrouter.env.erb'),
       notify  => Service['dcos-adminrouter'],
     }
@@ -61,5 +62,4 @@ class dcos::adminrouter (
       ],
     }
   }
-
 }

@@ -10,7 +10,7 @@ class dcos::params {
     'hash' => undef,
     'type' => undef,
   }
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian': {
       $executor = {
         'PATH' => '/usr/bin:/bin',

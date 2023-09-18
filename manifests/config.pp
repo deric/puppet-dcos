@@ -3,7 +3,6 @@
 # This class is called from dcos for service config.
 #
 class dcos::config {
-
   file_line { 'lc_env_var':
     path => '/etc/environment',
     line => 'LC_ALL=en_US.utf-8',
@@ -13,5 +12,4 @@ class dcos::config {
     path => '/etc/environment',
     line => 'LANG=en_US.utf-8',
   }
-
 }

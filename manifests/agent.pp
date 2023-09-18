@@ -1,5 +1,10 @@
 # DC/OS agent node
 #
+# @param public
+# @param attributes
+# @param mesos
+# @param resources
+# @param executor
 # @param region
 #    DC region
 # @param zone
@@ -37,7 +42,7 @@ class dcos::agent (
 
   if $dcos::bootstrap_url {
     exec { 'dcos agent install':
-      command     => "bash ${::dcos::download_dir}/dcos_install.sh ${role}",
+      command     => "bash ${dcos::download_dir}/dcos_install.sh ${role}",
       path        => '/bin:/usr/bin:/usr/sbin',
       onlyif      => 'test -z "`ls -A /opt/mesosphere`"',
       refreshonly => false,
@@ -60,7 +65,7 @@ class dcos::agent (
     default: {}
   }
 
-  $config_dir = $::dcos_config_path
+  $config_dir = $facts['dcos_config_path']
 
   file { "${config_dir}/../etc/mesos-executor-environment.json":
     ensure  => 'file',

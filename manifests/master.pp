@@ -1,20 +1,26 @@
 # DC/OS master node
 #
+# @param mesos
+# @param manage_adminrouter
+# @param service_name
+# @param adminrouter
+# @param metrics
+# @param region
+# @param zone
 class dcos::master (
   Hash             $mesos = {},
   Boolean          $manage_adminrouter = false,
   String           $service_name = 'dcos-mesos-master',
   Hash             $adminrouter = {},
   Hash             $metrics = {},
-  Optional[String] $region = $::dcos::region,
-  Optional[String] $zone = $::dcos::zone,
+  Optional[String] $region = $dcos::region,
+  Optional[String] $zone = $dcos::zone,
 ) inherits dcos {
-
   anchor { 'dcos::master::installed': }
 
   if $dcos::bootstrap_url {
     exec { 'dcos master install':
-      command     => "bash ${::dcos::download_dir}/dcos_install.sh master",
+      command     => "bash ${dcos::download_dir}/dcos_install.sh master",
       path        => '/bin:/usr/bin:/usr/sbin',
       onlyif      => 'test -z "`ls -A /opt/mesosphere`"',
       refreshonly => false,
@@ -22,7 +28,7 @@ class dcos::master (
     }
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian': {
       # needed for DC/OS < 1.11
       # make sure to try system library first
@@ -34,38 +40,38 @@ class dcos::master (
         require => Anchor['dcos::master::installed'],
       }
     }
-    default: { }
+    default: {}
   }
 
   if $manage_adminrouter {
-    class{'dcos::adminrouter':
+    class { 'dcos::adminrouter':
       config  => $adminrouter,
       require => Anchor['dcos::master::installed'],
     }
   }
 
-  file {'/opt/mesosphere/etc/mesos-master-extras':
-    ensure  => 'present',
+  file { '/opt/mesosphere/etc/mesos-master-extras':
+    ensure  => 'file',
     content => template('dcos/master-extras.erb'),
     notify  => Service[$service_name],
   }
 
   if $region or $zone {
-    file {'/var/lib/dcos/mesos-master-domain.json':
-      ensure  => 'present',
+    file { '/var/lib/dcos/mesos-master-domain.json':
+      ensure  => 'file',
       content => dcos::domain($region, $zone),
       notify  => Service[$service_name],
       require => Anchor['dcos::master::installed'],
     }
   }
 
-  $config_dir = $::dcos_config_path
+  $config_dir = $facts['dcos_config_path']
 
   # make sure fact is defined
-  if $::dcos_version and versioncmp($::dcos_version, '1.13.0') < 0 {
+  if $facts['dcos_version'] and versioncmp($facts['dcos_version'], '1.13.0') < 0 {
     if !empty($metrics) {
-      file {"${config_dir}/../etc/dcos-metrics-config.yaml":
-        ensure  => 'present',
+      file { "${config_dir}/../etc/dcos-metrics-config.yaml":
+        ensure  => 'file',
         content => template('dcos/dcos-metrics-config.erb'),
         notify  => Service['dcos-metrics-master'],
       }
@@ -86,5 +92,4 @@ class dcos::master (
     enable     => true,
     require    => [File['/opt/mesosphere/etc/mesos-master-extras'],Anchor['dcos::master::installed']],
   }
-
 }
