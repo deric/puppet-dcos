@@ -2,6 +2,7 @@
 
 * Use namespaced Puppet 4.x functions
 * Require stdlib >= 9
+* Replaced Anchors
 
 * [full changes](https://github.com/deric/puppet-dcos/compare/v0.6.0...v1.0.0)
 
