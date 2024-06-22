@@ -298,7 +298,7 @@ describe 'dcos::master' do
 
     it do
       is_expected.to contain_exec('dcos master install')
-        .that_comes_before('Anchor[dcos::master::installed]')
+        .that_comes_before('Service[dcos-mesos-master]')
     end
 
     it do

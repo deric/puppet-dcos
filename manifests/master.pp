@@ -16,16 +16,8 @@ class dcos::master (
   Optional[String] $region = $dcos::region,
   Optional[String] $zone = $dcos::zone,
 ) inherits dcos {
-  anchor { 'dcos::master::installed': }
-
-  if $dcos::bootstrap_url {
-    exec { 'dcos master install':
-      command     => "bash ${dcos::download_dir}/dcos_install.sh master",
-      path        => '/bin:/usr/bin:/usr/sbin',
-      onlyif      => 'test -z "`ls -A /opt/mesosphere`"',
-      refreshonly => false,
-      before      => Anchor['dcos::master::installed'],
-    }
+  class { 'dcos::bootstrap':
+    role => 'master',
   }
 
   case $facts['os']['family'] {
@@ -37,7 +29,7 @@ class dcos::master (
         line    => 'LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/opt/mesosphere/lib',
         match   => '^LD_LIBRARY_PATH=*',
         replace => true,
-        require => Anchor['dcos::master::installed'],
+        require => Class['Dcos::Bootstrap'],
       }
     }
     default: {}
@@ -46,7 +38,6 @@ class dcos::master (
   if $manage_adminrouter {
     class { 'dcos::adminrouter':
       config  => $adminrouter,
-      require => Anchor['dcos::master::installed'],
     }
   }
 
@@ -54,6 +45,7 @@ class dcos::master (
     ensure  => 'file',
     content => template('dcos/master-extras.erb'),
     notify  => Service[$service_name],
+    require => Class['Dcos::Bootstrap'],
   }
 
   if $region or $zone {
@@ -61,7 +53,7 @@ class dcos::master (
       ensure  => 'file',
       content => dcos::domain($region, $zone),
       notify  => Service[$service_name],
-      require => Anchor['dcos::master::installed'],
+      require => Class['Dcos::Bootstrap'],
     }
   }
 
@@ -74,6 +66,7 @@ class dcos::master (
         ensure  => 'file',
         content => template('dcos/dcos-metrics-config.erb'),
         notify  => Service['dcos-metrics-master'],
+        require => Class['Dcos::Bootstrap'],
       }
     }
 
@@ -90,6 +83,6 @@ class dcos::master (
     hasstatus  => true,
     hasrestart => true,
     enable     => true,
-    require    => [File['/opt/mesosphere/etc/mesos-master-extras'],Anchor['dcos::master::installed']],
+    require    => [File['/opt/mesosphere/etc/mesos-master-extras'],Class['Dcos::Bootstrap']],
   }
 }

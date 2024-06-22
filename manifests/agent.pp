@@ -25,8 +25,6 @@ class dcos::agent (
   Boolean          $manage_service = true,
   Boolean          $force_reload = true,
 ) inherits dcos {
-  anchor { 'dcos::agent::installed': }
-
   if $public {
     $dcos_mesos_service = 'dcos-mesos-slave-public'
     $role = 'slave_public'
@@ -35,19 +33,13 @@ class dcos::agent (
     $role = 'slave'
   }
 
+  class { 'dcos::bootstrap':
+    role => $role,
+  }
+
   $_manage_service = $manage_service ? {
     true    => Service[$dcos_mesos_service],
     default => [],
-  }
-
-  if $dcos::bootstrap_url {
-    exec { 'dcos agent install':
-      command     => "bash ${dcos::download_dir}/dcos_install.sh ${role}",
-      path        => '/bin:/usr/bin:/usr/sbin',
-      onlyif      => 'test -z "`ls -A /opt/mesosphere`"',
-      refreshonly => false,
-      before      => Anchor['dcos::agent::installed'],
-    }
   }
 
   case $facts['os']['family'] {
@@ -59,7 +51,7 @@ class dcos::agent (
         line    => 'LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/opt/mesosphere/lib',
         match   => '^LD_LIBRARY_PATH=*',
         replace => true,
-        require => Anchor['dcos::agent::installed'],
+        require => Class['Dcos::Bootstrap'],
       }
     }
     default: {}
@@ -71,7 +63,7 @@ class dcos::agent (
     ensure  => 'file',
     content => dcos::sorted_json($executor),
     notify  => $_manage_service,
-    require => Anchor['dcos::agent::installed'],
+    require => Class['Dcos::Bootstrap'],
   }
 
   file { '/var/lib/dcos':
@@ -107,7 +99,7 @@ class dcos::agent (
       onlyif      => 'test -d /var/lib/dcos',
       subscribe   => File['/var/lib/dcos/mesos-slave-common'],
       notify      => Exec['dcos-systemd-reload'],
-      require     => Anchor['dcos::agent::installed'],
+      require     => Class['Dcos::Bootstrap'],
     }
 
     exec { 'dcos-systemd-reload':
@@ -115,7 +107,7 @@ class dcos::agent (
       path        => '/bin:/usr/bin:/usr/sbin',
       onlyif      => 'test -d /var/lib/dcos',
       refreshonly => true,
-      require     => Anchor['dcos::agent::installed'],
+      require     => Class['Dcos::Bootstrap'],
     }
   }
 
@@ -125,7 +117,7 @@ class dcos::agent (
       hasstatus  => true,
       hasrestart => true,
       enable     => true,
-      require    => Anchor['dcos::agent::installed'],
+      require    => Class['Dcos::Bootstrap'],
     }
   }
 }

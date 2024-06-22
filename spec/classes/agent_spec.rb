@@ -190,14 +190,14 @@ describe 'dcos::agent' do
     end
 
     it do
-      is_expected.to contain_exec('dcos agent install').with({
+      is_expected.to contain_exec('dcos slave install').with({
                                                                'command' => 'bash /tmp/dcos/dcos_install.sh slave',
                                                              })
     end
 
     it do
-      is_expected.to contain_exec('dcos agent install')
-        .that_comes_before('Anchor[dcos::agent::installed]')
+      is_expected.to contain_exec('dcos slave install')
+        .that_comes_before('Service[dcos-mesos-slave]')
     end
   end
 
