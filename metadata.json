@@ -1,6 +1,6 @@
 {
   "name": "deric-dcos",
-  "version": "0.6.0",
+  "version": "1.0.0",
   "author": "deric",
   "summary": "Manage DC/OS nodes",
   "license": "Apache-2.0",
@@ -10,7 +10,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 1.0.0 < 10.0.0"
+      "version_requirement": ">= 9.0.0 < 10.0.0"
     },
     {
       "name": "puppet/archive",

@@ -1,3 +1,11 @@
+## [2024-06-22] Release 1.0.0
+
+* Use namespaced Puppet 4.x functions
+* Require stdlib >= 9
+
+* [full changes](https://github.com/deric/puppet-dcos/compare/v0.6.0...v1.0.0)
+
+
 ## [2020-12-08] Release 0.5.0
 
  * Don't replace existing files/symlinks on Debian (buster support)
