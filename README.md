@@ -1,117 +1,145 @@
-# dcos
+## puppet-dcos
 
-Welcome to your new module. A short overview of the generated parts can be found
-in the [PDK documentation][1].
+[![Puppet
+Forge](http://img.shields.io/puppetforge/v/deric/dcos.svg)](https://forge.puppetlabs.com/deric/dcos) [![Test](https://github.com/deric/puppet-dcos/actions/workflows/test.yml/badge.svg)](https://github.com/deric/puppet-dcos/actions/workflows/test.yml) [![Puppet Forge
+Downloads](http://img.shields.io/puppetforge/dt/deric/dcos.svg)](https://forge.puppetlabs.com/deric/dcos/scores)
 
-The README template below provides a starting point with details about what
-information to include in your README.
+DC/OS nodes management
 
-## Table of Contents
+## Features
 
-1. [Description](#description)
-1. [Setup - The basics of getting started with dcos](#setup)
-    * [What dcos affects](#what-dcos-affects)
-    * [Setup requirements](#setup-requirements)
-    * [Beginning with dcos](#beginning-with-dcos)
-1. [Usage - Configuration options and additional functionality](#usage)
-1. [Limitations - OS compatibility, etc.](#limitations)
-1. [Development - Guide for contributing to the module](#development)
+ * installation from bootstrap server
+ * manage agent's attributes
+ * provide `dcos-version` command (and export `dcos_version` fact e.g. to PuppetDB)
+ * support running DC/OS on Debian based systems
 
-## Description
+## Installation from bootstrap server
 
-Briefly tell users why they might want to use your module. Explain what your
-module does and what kind of problems users can solve with it.
+When bootstrap URL is given, Puppet will try to install DC/OS (in case that there's no previous installation in `/opt/mesosphere`):
+```yaml
+dcos::bootstrap_url: 'http://192.168.1.1:9090'
+# checksum of dcos_install.sh
+dcos::install_checksum:
+  type: 'sha1'
+  hash: '43d6a53813bd9c68e26d0b3b8d8338182017dbb8'
+```
+then simply include DC/OS into node's definition. For master node:
+```puppet
+include dcos::master
+```
+For agent:
+```puppet
+include dcos::agent
+```
 
-This should be a fairly short description helps the user decide if your module
-is what they want.
+Puppet will fetch `$bootstrap_script` (defaults to `dcos_install.sh`) and attempt to run [Advanced installation](https://dcos.io/docs/1.10/installing/custom/advanced/) e.g. `bash dcos_install.sh slave`.
 
-## Setup
+Role `slave_public` can be also configured in Hiera backend:
+```yaml
+dcos::agent::public: true
+```
 
-### What dcos affects **OPTIONAL**
+You can also provide checksums for installation script:
+```puppet
 
-If it's obvious what your module touches, you can skip this section. For
-example, folks can probably figure out that your mysql_instance module affects
-their MySQL instances.
-
-If there's more that they should know about, though, this is the place to
-mention:
-
-* Files, packages, services, or operations that the module will alter, impact,
-  or execute.
-* Dependencies that your module automatically installs.
-* Warnings or other important notices.
-
-### Setup Requirements **OPTIONAL**
-
-If your module requires anything extra before setting up (pluginsync enabled,
-another module, etc.), mention it here.
-
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you might want to include an additional "Upgrading" section here.
-
-### Beginning with dcos
-
-The very basic steps needed for a user to get the module up and running. This
-can include setup steps, if necessary, or it can be an example of the most basic
-use of the module.
+class {'dcos':
+  bootstrap_url => 'http://192.168.1.1:9090',
+  install_checksum => {
+    type => 'sha1',
+    hash => '43d6a53813bd9c68e26d0b3b8d8338182017dbb8'
+  },
+}
+```
 
 ## Usage
 
-Include usage examples for common use cases in the **Usage** section. Show your
-users how to use your module to solve problems, and be sure to include code
-examples. Include three to five examples of the most important or common tasks a
-user can accomplish with your module. Show users how to accomplish more complex
-tasks that involve different types, classes, and functions working in tandem.
+Private DC/OS agent:
 
-## Reference
-
-This section is deprecated. Instead, add reference information to your code as
-Puppet Strings comments, and then use Strings to generate a REFERENCE.md in your
-module. For details on how to add code comments and generate documentation with
-Strings, see the [Puppet Strings documentation][2] and [style guide][3].
-
-If you aren't ready to use Strings yet, manually create a REFERENCE.md in the
-root of your module directory and list out each of your module's classes,
-defined types, facts, functions, Puppet tasks, task plans, and resource types
-and providers, along with the parameters for each.
-
-For each element (class, defined type, function, and so on), list:
-
-* The data type, if applicable.
-* A description of what the element does.
-* Valid values, if the data type doesn't make it obvious.
-* Default value, if any.
-
-For example:
-
+```puppet
+class{'dcos::agent': }
 ```
-### `pet::cat`
+Public agent:
+```puppet
+class{'dcos::agent':
+  public => true
+}
+```
 
-#### Parameters
+Agent accepts `mesos` hash with `ENV` variables that will override defaults in `/opt/mesosphere/etc/mesos-slave-common`.
 
-##### `meow`
+Disabling CFS on agent node:
+```puppet
+class{'dcos::agent':
+  mesos => {
+    'MESOS_CGROUPS_ENABLE_CFS' => false
+  }
+}
+```
 
-Enables vocalization in your cat. Valid options: 'string'.
+Master node:
 
-Default: 'medium-loud'.
+```puppet
+class{'dcos::master':
+  mesos => {
+    'MESOS_QUORUM' => 2,
+    'MESOS_max_completed_frameworks' => 50,
+    'MESOS_max_completed_tasks_per_framework' => 1000,
+    'MESOS_max_unreachable_tasks_per_framework' => 1000,
+  }
+}
+```
+`mesos` hash will create a file `/opt/mesosphere/etc/mesos-master-extras` overriding default `ENV` variables.
+
+attributes:
+```yaml
+dcos::agent::attributes:
+  dc: us-east
+  storage: SATA
+```
+
+also existing facts can be easily used:
+```yaml
+dcos::agent::attributes:
+  arch: "%{::architecture}"
+  hostname: "%{::fqdn}"
+```
+
+## Mesos Resources
+
+Resources offered by Mesos could be limited using [`MESOS_RESOURCES` ENV variable](https://mesos.readthedocs.io/en/latest/attributes-resources/).
+
+Resources attribute:
+```yaml
+dcos::agent::resources:
+  cpus:
+    type: SCALAR
+    scalar:
+      value: 7.0
+```
+will be converted to JSON string that will be passed to `mesos-agent`
+```json
+[
+  {
+    "name": "cpus",
+    "type": "SCALAR",
+    "scalar": {
+      "value": 7.0
+    }
+  }
+]
+```
+NOTE: DC/OS merges `MESOS_RESOURCES` with allocated disk resources.
+
+## YAML (Hiera/lookup) configuration
+
+Simply use supported parameters:
+```yaml
+dcos::agent::mesos:
+  MESOS_CGROUPS_ENABLE_CFS: false
+dcos::master::mesos:
+  MESOS_QUORUM: 2
 ```
 
 ## Limitations
 
-In the Limitations section, list any incompatibilities, known issues, or other
-warnings.
-
-## Development
-
-In the Development section, tell other users the ground rules for contributing
-to your project and how they should submit their work.
-
-## Release Notes/Contributors/Etc. **Optional**
-
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You can also add any additional sections you feel are
-necessary or important to include here. Please use the `##` header.
-
-[1]: https://puppet.com/docs/pdk/latest/pdk_generating_modules.html
-[2]: https://puppet.com/docs/puppet/latest/puppet_strings.html
-[3]: https://puppet.com/docs/puppet/latest/puppet_strings_style.html
+Currently doesn't manage Docker dependency at all. Make sure appropriate Docker version is running before installing DC/OS.
