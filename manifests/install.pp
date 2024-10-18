@@ -44,7 +44,7 @@ class dcos::install {
       cleanup       => false,
       checksum      => $dcos::install_checksum['hash'],
       checksum_type => $dcos::install_checksum['type'],
-      require       => File[$dcos::download_dir],
+      require       => [File[$dcos::download_dir], Class['Dcos::Bootstrap']],
     }
   }
 }
