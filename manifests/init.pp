@@ -37,8 +37,8 @@ class dcos (
   Optional[String] $region           = undef,
   Optional[String] $zone             = undef
 ) inherits dcos::params {
-  contain dcos::install
-  contain dcos::config
+  include dcos::install
+  include dcos::config
 
   Class['dcos::install']
   -> Class['dcos::config']

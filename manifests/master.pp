@@ -17,7 +17,8 @@ class dcos::master (
   Optional[String] $zone = $dcos::zone,
 ) inherits dcos {
   class { 'dcos::bootstrap':
-    role => 'master',
+    role    => 'master',
+    require => Class['Dcos::Install'],
   }
 
   case $facts['os']['family'] {

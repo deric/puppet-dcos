@@ -34,7 +34,8 @@ class dcos::agent (
   }
 
   class { 'dcos::bootstrap':
-    role => $role,
+    role    => $role,
+    require => Class['Dcos::Install'],
   }
 
   $_manage_service = $manage_service ? {
