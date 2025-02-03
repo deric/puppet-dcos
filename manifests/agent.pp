@@ -13,6 +13,8 @@
 #    Whether service should be restarted upon config changes
 # @param force_reload
 #    Upon attribute changes agent will be unregistered
+# @param modify_ldpath
+#    Whether LD_PATH should be touched
 #
 class dcos::agent (
   Boolean          $public = false,
@@ -24,6 +26,7 @@ class dcos::agent (
   Optional[String] $zone = $dcos::zone,
   Boolean          $manage_service = true,
   Boolean          $force_reload = true,
+  Boolean          $modify_ldpath = true,
 ) inherits dcos {
   if $public {
     $dcos_mesos_service = 'dcos-mesos-slave-public'
@@ -45,14 +48,24 @@ class dcos::agent (
 
   case $facts['os']['family'] {
     'Debian': {
-      # needed for DC/OS < 1.11
-      # make sure to try system library first
-      file_line { 'update LD_PATH /opt/mesosphere/environment':
-        path    => '/opt/mesosphere/environment',
-        line    => 'LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/opt/mesosphere/lib',
-        match   => '^LD_LIBRARY_PATH=*',
-        replace => true,
-        require => Class['Dcos::Bootstrap'],
+      if $modify_ldpath {
+        # needed for DC/OS < 1.11
+        # make sure to try system library first
+        file_line { 'update LD_PATH /opt/mesosphere/environment':
+          path    => '/opt/mesosphere/environment',
+          line    => 'LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/opt/mesosphere/lib',
+          match   => '^LD_LIBRARY_PATH=*',
+          replace => true,
+          require => Class['Dcos::Bootstrap'],
+        }
+      } else {
+        file_line { 'update LD_PATH /opt/mesosphere/environment':
+          path    => '/opt/mesosphere/environment',
+          line    => 'LD_LIBRARY_PATH=/opt/mesosphere/lib',
+          match   => '^LD_LIBRARY_PATH=*',
+          replace => true,
+          require => Class['Dcos::Bootstrap'],
+        }
       }
     }
     default: {}
