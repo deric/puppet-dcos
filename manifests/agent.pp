@@ -58,14 +58,6 @@ class dcos::agent (
           replace => true,
           require => Class['Dcos::Bootstrap'],
         }
-      } else {
-        file_line { 'update LD_PATH /opt/mesosphere/environment':
-          path    => '/opt/mesosphere/environment',
-          line    => 'LD_LIBRARY_PATH=/opt/mesosphere/lib',
-          match   => '^LD_LIBRARY_PATH=*',
-          replace => true,
-          require => Class['Dcos::Bootstrap'],
-        }
       }
     }
     default: {}
