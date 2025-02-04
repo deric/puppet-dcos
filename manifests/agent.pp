@@ -46,9 +46,10 @@ class dcos::agent (
     default => [],
   }
 
-  case $facts['os']['family'] {
-    'Debian': {
-      if $modify_ldpath {
+
+  if $modify_ldpath {
+    case $facts['os']['family'] {
+      'Debian': {
         # needed for DC/OS < 1.11
         # make sure to try system library first
         file_line { 'update LD_PATH /opt/mesosphere/environment':
@@ -59,17 +60,17 @@ class dcos::agent (
           require => Class['Dcos::Bootstrap'],
         }
       }
+      default: {}
     }
-    default: {}
-  }
 
-  $config_dir = $facts['dcos_config_path']
+    $config_dir = $facts['dcos_config_path']
 
-  file { "${config_dir}/../etc/mesos-executor-environment.json":
-    ensure  => 'file',
-    content => dcos::sorted_json($executor),
-    notify  => $_manage_service,
-    require => Class['Dcos::Bootstrap'],
+    file { "${config_dir}/../etc/mesos-executor-environment.json":
+      ensure  => 'file',
+      content => dcos::sorted_json($executor),
+      notify  => $_manage_service,
+      require => Class['Dcos::Bootstrap'],
+    }
   }
 
   file { '/var/lib/dcos':
