@@ -46,7 +46,6 @@ class dcos::agent (
     default => [],
   }
 
-
   if $modify_ldpath {
     case $facts['os']['family'] {
       'Debian': {
